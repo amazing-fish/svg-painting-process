@@ -43,7 +43,7 @@ nodes.reference.hidden=true;
 nodes['generator-source'].textContent=JSON.stringify({encoding:'plain',filename:'test.py'});
 const document=new EventTarget();document.getElementById=id=>{assert.ok(nodes[id],id+' exists');return nodes[id];};document.createElement=tag=>new Node(tag);document.createElementNS=(_,tag)=>new Node(tag);document.createDocumentFragment=()=>new Node('#fragment');
 const strokes=Array.from({length:850},(_,i)=>({start:i*300,duration:200,pauseAfter:100,layer:0,color:'#446655',opacity:1,points:[[i,0],[i+10,0],[i+20,0]],left:[[i,-3],[i+10,-3],[i+20,-3]],right:[[i,3],[i+10,3],[i+20,3]],d:`M${i},-3 L${i+20},-3 L${i+20},3 L${i},3 Z`}));
-const makeData=(n,label)=>({width:600,height:800,strokes:strokes.slice(0,n),totalDuration:n*300,layers:[{name:label}],sourceDataURL:'data:image/png;base64,AA=='});
+const makeData=(n,label)=>({width:600,height:800,strokes:strokes.slice(0,n),totalDuration:n*300,layers:[{name:label}],sourceDataURL:'data:image/png;base64,AA==',constructionBlocked:n===10?{reason:'repair_budget_exhausted_before_coarse_ready'}:null});
 const pack=data=>({encoding:'gzip-base64',payload:zlib.gzipSync(JSON.stringify(data)).toString('base64')});
 const bundle={version:'7.0',paintings:[{id:'one',label:'人物一',data:pack(makeData(850,'底形'))},{id:'two',label:'人物二',data:pack(makeData(10,'另一底形'))}]};
 nodes['painting-data'].textContent=JSON.stringify(bundle);
@@ -92,6 +92,9 @@ vm.runInContext(script,context);
   check(decompressions===2,'a second example is decompressed only after selection');
   check(oldApi.getState().disposed&&oldApi.getState().mountedPaths===0,'previous paths and geometry state are disposed');
   api=context.paintingAPI;check(api.getState().strokeCount===10&&api.getState().completed===0,'example switch resets to new canvas');
+  check(!nodes['completion-note'].hidden,'blocked partial process is visibly identified');
+  await api.renderAt(api.data.totalDuration);check(nodes['phase-label'].textContent.includes('粗层未完成'),'partial end is not labelled finished painting');
+  await api.renderAt(0);
   nodes.play.click();check(api.getState().playing,'a single play listener remains after example switch');
   api.pause();check(frames.size===0,'pause cancels animation callback');
   // A large forward frame yields between chunks. A quick pause/play during

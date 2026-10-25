@@ -1,0 +1,207 @@
+{
+  "baselineCommit": "17651f354d38624c93e3394e61e7198a08d4b4f5",
+  "parameters": {
+    "maxEdge": 640,
+    "through": 2
+  },
+  "selection": "5 visually reviewed illustrations from a 22-image local gallery; full body is seated",
+  "naturalnessAccepted": false,
+  "beforeTotalSeconds": 83.043,
+  "afterTotalSeconds": 126.05,
+  "samples": [
+    {
+      "sample": 1,
+      "category": "head-closeup",
+      "sha256": "7e7d0740ae122ebd5ca703c839882f68185c8515e98de4030b49ee457e849032",
+      "before": {
+        "status": "generated",
+        "seconds": 16.804,
+        "strokes": 676,
+        "stages": 2,
+        "measuredMovements": 80,
+        "unresolved": 47,
+        "regressiveAcceptedConstructionStrokes": 67,
+        "constructionStrokes": 374,
+        "repairStrokes": 119
+      },
+      "after": {
+        "status": "incomplete",
+        "seconds": 10.281,
+        "strokes": 198,
+        "stages": 1,
+        "completedStages": 0,
+        "blocked": {
+          "layer": 0,
+          "guideIndex": 31,
+          "reportIndex": 47,
+          "reason": "repair_budget_exhausted_before_coarse_ready"
+        },
+        "measuredMovements": 32,
+        "unresolved": 12,
+        "regressiveAcceptedConstructionStrokes": 0,
+        "constructionStrokes": 90,
+        "repairStrokes": 31
+      }
+    },
+    {
+      "sample": 2,
+      "category": "half-body",
+      "sha256": "041739b0242a4140c05e32d5d8cf9dcc283560b2b2cc82dd96a1651130232cde",
+      "before": {
+        "status": "generated",
+        "seconds": 11.153,
+        "strokes": 324,
+        "stages": 2,
+        "measuredMovements": 32,
+        "unresolved": 14,
+        "regressiveAcceptedConstructionStrokes": 42,
+        "constructionStrokes": 168,
+        "repairStrokes": 34
+      },
+      "after": {
+        "status": "incomplete",
+        "seconds": 3.915,
+        "strokes": 92,
+        "stages": 1,
+        "completedStages": 0,
+        "blocked": {
+          "layer": 0,
+          "guideIndex": 7,
+          "reportIndex": 10,
+          "reason": "repair_budget_exhausted_before_coarse_ready"
+        },
+        "measuredMovements": 8,
+        "unresolved": 3,
+        "regressiveAcceptedConstructionStrokes": 0,
+        "constructionStrokes": 20,
+        "repairStrokes": 6
+      }
+    },
+    {
+      "sample": 3,
+      "category": "full-body-complex-costume",
+      "sha256": "bbeb4acc9f17aed429d0264e28d82e4b9d9e79beeb73b0693d1391b404381f93",
+      "before": {
+        "status": "generated",
+        "seconds": 15.12,
+        "strokes": 658,
+        "stages": 2,
+        "measuredMovements": 46,
+        "unresolved": 17,
+        "regressiveAcceptedConstructionStrokes": 86,
+        "constructionStrokes": 337,
+        "repairStrokes": 65
+      },
+      "after": {
+        "status": "generated",
+        "seconds": 35.228,
+        "strokes": 568,
+        "stages": 2,
+        "completedStages": 2,
+        "blocked": null,
+        "measuredMovements": 46,
+        "unresolved": 15,
+        "regressiveAcceptedConstructionStrokes": 0,
+        "constructionStrokes": 218,
+        "repairStrokes": 25
+      }
+    },
+    {
+      "sample": 4,
+      "category": "two-person",
+      "sha256": "96d0fe7c9ed0d13d943ed205a81db91b2fc31860a0418cb092e49475275ebec6",
+      "before": {
+        "status": "generated",
+        "seconds": 25.291,
+        "strokes": 1227,
+        "stages": 2,
+        "measuredMovements": 96,
+        "unresolved": 59,
+        "regressiveAcceptedConstructionStrokes": 155,
+        "constructionStrokes": 744,
+        "repairStrokes": 219
+      },
+      "after": {
+        "status": "incomplete",
+        "seconds": 41.016,
+        "strokes": 269,
+        "stages": 1,
+        "completedStages": 0,
+        "blocked": {
+          "layer": 0,
+          "guideIndex": 30,
+          "reportIndex": 49,
+          "reason": "repair_budget_exhausted_before_coarse_ready"
+        },
+        "measuredMovements": 31,
+        "unresolved": 17,
+        "regressiveAcceptedConstructionStrokes": 0,
+        "constructionStrokes": 147,
+        "repairStrokes": 50
+      }
+    },
+    {
+      "sample": 5,
+      "category": "dynamic-portrait",
+      "sha256": "16f246666782463540e2c11769fb8eeb0e32b5d8223d0244db119b5be19c0209",
+      "before": {
+        "status": "generated",
+        "seconds": 14.675,
+        "strokes": 896,
+        "stages": 2,
+        "measuredMovements": 96,
+        "unresolved": 32,
+        "regressiveAcceptedConstructionStrokes": 104,
+        "constructionStrokes": 465,
+        "repairStrokes": 98
+      },
+      "after": {
+        "status": "incomplete",
+        "seconds": 35.61,
+        "strokes": 352,
+        "stages": 2,
+        "completedStages": 1,
+        "blocked": {
+          "layer": 1,
+          "guideIndex": 25,
+          "reportIndex": 101,
+          "reason": "repair_budget_exhausted_before_coarse_ready"
+        },
+        "measuredMovements": 74,
+        "unresolved": 17,
+        "regressiveAcceptedConstructionStrokes": 0,
+        "constructionStrokes": 248,
+        "repairStrokes": 42
+      }
+    }
+  ],
+  "standaloneGenerator": {
+    "exitCode": 1,
+    "matchesModularStrokeGeometryAndTiming": true,
+    "strokes": 92
+  },
+  "visualReview": {
+    "reviewer": "Codex visual inspection; not human naturalness approval",
+    "scope": "Equal original-time browser frames at available 100/140/185/210 locators and five continuous original-1x transition clips",
+    "accepted": false,
+    "findings": [
+      "Head closeup and two-person construction remain fragmented; key facial/body relationships are unstable.",
+      "Half-body coarse state is not readable; blocked guide 7 is a narrow edge fragment (max radius 7.58px at coarse sigma16), so pose failure has not been isolated as the cause.",
+      "Seated full-body case ran two stages but still has 15 unresolved profile episodes; completion does not establish naturalness.",
+      "Dynamic portrait retains large colour masses but key head/shoulder turns are not reliably established."
+    ],
+    "structureHintDecision": "Do not add a pose model in this patch: the first observed blockers include narrow guide/load scale and stopping mismatch; evidence does not yet isolate pose recognition as the necessary repair."
+  },
+  "validation": {
+    "pythonUnittest": {
+      "passed": 23,
+      "seconds": 0.762
+    },
+    "playerLogic": {
+      "passedAssertions": 14794,
+      "simulatedDOM": true
+    },
+    "compileall": "passed",
+    "naturalnessAccepted": false
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "browser": "156.0.8078.47",
+  "headless": true,
+  "checks": [
+    "standalone: serial timeline, growing prefix, pause/resume, reference toggle, real/log mode preserves raw time",
+    "standalone: visible seek control",
+    "comparison: five continuous original-1x transition or blocked-end clips (actual bounds recorded), shared raw times, pause/resume, locators, reference toggle, 390px overflow"
+  ],
+  "clips": [
+    {
+      "case": 1,
+      "clip": {
+        "label": "原版首次未完成转移 · 同原始时间",
+        "anchorMs": 64890,
+        "status": "available",
+        "startMs": 61890,
+        "endMs": 67890,
+        "trailingContextTruncated": false,
+        "terminal": false
+      },
+      "midTime": 63941.80000000003,
+      "endTime": 67890,
+      "counts": {
+        "before": 127,
+        "after": 133
+      }
+    },
+    {
+      "case": 2,
+      "clip": {
+        "label": "原版首次未完成转移 · 同原始时间",
+        "anchorMs": 42974,
+        "status": "available",
+        "startMs": 39974,
+        "endMs": 45974,
+        "trailingContextTruncated": false,
+        "terminal": false
+      },
+      "midTime": 42027.7999999882,
+      "endTime": 45974,
+      "counts": {
+        "before": 83,
+        "after": 88
+      }
+    },
+    {
+      "case": 3,
+      "clip": {
+        "label": "原版首次未完成转移 · 同原始时间",
+        "anchorMs": 48427,
+        "status": "available",
+        "startMs": 45427,
+        "endMs": 51427,
+        "trailingContextTruncated": false,
+        "terminal": false
+      },
+      "midTime": 47480.29999999437,
+      "endTime": 51427,
+      "counts": {
+        "before": 101,
+        "after": 102
+      }
+    },
+    {
+      "case": 4,
+      "clip": {
+        "label": "原版首次未完成转移 · 同原始时间",
+        "anchorMs": 67027,
+        "status": "available",
+        "startMs": 64027,
+        "endMs": 70027,
+        "trailingContextTruncated": false,
+        "terminal": false
+      },
+      "midTime": 66091.7999999889,
+      "endTime": 70027,
+      "counts": {
+        "before": 139,
+        "after": 142
+      }
+    },
+    {
+      "case": 5,
+      "clip": {
+        "label": "原版首次未完成转移 · 同原始时间",
+        "anchorMs": 57894,
+        "status": "available",
+        "startMs": 54894,
+        "endMs": 60894,
+        "trailingContextTruncated": false,
+        "terminal": false
+      },
+      "midTime": 56953.200000012635,
+      "endTime": 60894,
+      "counts": {
+        "before": 120,
+        "after": 121
+      }
+    }
+  ],
+  "canvasTopDifference": 0,
+  "mobileOverflow": false,
+  "pageErrors": [],
+  "additionalBlockedClip": {
+    "browser": "156.0.8078.47",
+    "headless": true,
+    "case": 5,
+    "firstUnresolved": {
+      "reportIndex": 7,
+      "guideIndex": 5,
+      "layer": 0,
+      "status": "no_improvement",
+      "strokeCount": 116,
+      "timeMs": 58043,
+      "kind": "transfer",
+      "hasNextTransfer": true
+    },
+    "blockedEnd": {
+      "reportIndex": 101,
+      "guideIndex": 25,
+      "layer": 1,
+      "status": "budget_unfinished",
+      "strokeCount": 352,
+      "timeMs": 161823,
+      "kind": "blocked_end",
+      "hasNextTransfer": false,
+      "reason": {
+        "layer": 1,
+        "guideIndex": 25,
+        "reportIndex": 101,
+        "reason": "repair_budget_exhausted_before_coarse_ready"
+      }
+    },
+    "clip": {
+      "label": "修改版预算停止前（无下一转移） · 同原始时间",
+      "anchorMs": 161823,
+      "status": "available",
+      "startMs": 158823,
+      "endMs": 161823,
+      "trailingContextTruncated": true,
+      "terminal": true
+    },
+    "startMs": 158823,
+    "pausedMs": 159435.39999997616,
+    "endMs": 161823,
+    "counts": {
+      "before": 344,
+      "after": 352
+    },
+    "pageErrors": []
+  }
+}
