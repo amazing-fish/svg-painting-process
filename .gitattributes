@@ -1,0 +1,4 @@
+artifacts/** linguist-generated=true
+artifacts/**/*.html -diff
+artifacts/**/*.svg -diff
+artifacts/**/*.zip -diff

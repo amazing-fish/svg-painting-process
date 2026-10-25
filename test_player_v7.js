@@ -109,5 +109,15 @@ vm.runInContext(script,context);
   await oldTick;
   check(frames.size===1,'an obsolete tick cannot duplicate the resumed playback loop');
   api.pause();check(frames.size===0,'pause cancels the sole resumed animation callback');
+  // Opening the source template must explain the correct artifact entry point
+  // before attempting to parse its deliberately unfilled payload.
+  const rawNodes=Object.fromEntries(['painting-data','loading','loading-label'].map(id=>[id,new Node()]));
+  rawNodes['painting-data'].textContent='__PAINTING_DATA__';
+  const rawDocument={getElementById:id=>rawNodes[id],createElement:tag=>new Node(tag)};
+  const rawContext={document:rawDocument,console:{error(){}},setTimeout,clearTimeout,Event};
+  rawContext.window=rawContext;rawContext.globalThis=rawContext;vm.createContext(rawContext);
+  vm.runInContext(script,rawContext);await new Promise(resolve=>setTimeout(resolve,0));
+  check(rawContext.paintingTemplate===true&&!rawContext.paintingError,'raw template is identified without an invalid-JSON error');
+  check(rawNodes.loading.childNodes.some(node=>node.tagName==='a'&&node.href.includes('artifacts/')),'raw template points to the real deliverable');
   console.log(JSON.stringify({passed:checks,clockInversion:true,modeSwitchPreservesRawTime:true,strictSingleActive:true,bundleSwitch:true,lazyDecompression:true,previousStateDisposed:true,pauseResumeDuringRender:true,browserTest:false}));
 })().catch(error=>{console.error(error);process.exitCode=1;});
