@@ -39,14 +39,14 @@ class ComparisonTest(unittest.TestCase):
             first = self.manifest(root / "before", before)
             second = self.manifest(root / "after", after)
             target = compare(first, second, root / "comparison")
-            records = json.loads((target.parent / "comparison-evidence.json").read_text())["cases"][0]
+            records = json.loads((target.parent / "comparison-evidence.json").read_text(encoding="utf-8"))["cases"][0]
             frames = records["runs"]["after"]["frames"]
             self.assertEqual(frames[2]["status"], "unavailable: fewer strokes")
             self.assertEqual(records["clips"][0]["anchorMs"], stroke_time(before, 100))
             self.assertEqual(records["clips"][1]["status"], "unavailable")
             frame = ET.parse(target.parent / "sample-001" / "before" / "stroke-100.svg")
             self.assertEqual(len(frame.findall(".//{http://www.w3.org/2000/svg}path")), 100)
-            self.assertNotIn("<image", (target.parent / "sample-001" / "before" / "stroke-100.svg").read_text())
+            self.assertNotIn("<image", (target.parent / "sample-001" / "before" / "stroke-100.svg").read_text(encoding="utf-8"))
             self.assertIsNone(stroke_time(after, 185))
 
     def test_reject_changed_input_or_parameters(self):
@@ -54,15 +54,15 @@ class ComparisonTest(unittest.TestCase):
             root = Path(folder)
             first = self.manifest(root / "before", painting(1))
             second = self.manifest(root / "after", painting(1))
-            changed = json.loads(second.read_text())
+            changed = json.loads(second.read_text(encoding="utf-8"))
             changed["parameters"]["maxEdge"] = 768
-            second.write_text(json.dumps(changed))
+            second.write_text(json.dumps(changed), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "identical ordered"):
                 compare(first, second, root / "comparison")
             changed["parameters"]["maxEdge"] = 640
             changed["inputs"][0]["sha256"] = "b" * 64
             changed["results"][0]["sha256"] = "b" * 64
-            second.write_text(json.dumps(changed))
+            second.write_text(json.dumps(changed), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "identical ordered"):
                 compare(first, second, root / "comparison")
 
@@ -77,7 +77,7 @@ class ComparisonTest(unittest.TestCase):
             first = self.manifest(root / "before", data)
             second = self.manifest(root / "after", data, error=True)
             target = compare(first, second, root / "comparison")
-            record = json.loads((target.parent / "comparison-evidence.json").read_text())["cases"][0]
+            record = json.loads((target.parent / "comparison-evidence.json").read_text(encoding="utf-8"))["cases"][0]
             self.assertEqual(record["runs"]["after"]["status"], "error")
             self.assertTrue(all(clip["status"] == "unavailable" for clip in record["clips"]))
 
@@ -91,7 +91,7 @@ class ComparisonTest(unittest.TestCase):
             first = self.manifest(root / "before", before)
             second = self.manifest(root / "after", after, status="incomplete")
             target = compare(first, second, root / "comparison")
-            record = json.loads((target.parent / "comparison-evidence.json").read_text())["cases"][0]
+            record = json.loads((target.parent / "comparison-evidence.json").read_text(encoding="utf-8"))["cases"][0]
             run = record["runs"]["after"]
             self.assertTrue(run["incomplete"])
             self.assertEqual((run["stages"], run["completedStages"]), (1, 0))
@@ -116,7 +116,7 @@ class ComparisonTest(unittest.TestCase):
             first = self.manifest(root / "before", before)
             second = self.manifest(root / "after", after, status="incomplete")
             target = compare(first, second, root / "comparison")
-            record = json.loads((target.parent / "comparison-evidence.json").read_text())["cases"][0]
+            record = json.loads((target.parent / "comparison-evidence.json").read_text(encoding="utf-8"))["cases"][0]
             run = record["runs"]["after"]
             self.assertEqual(run["unresolvedTransition"]["kind"], "transfer")
             self.assertEqual(run["unresolvedTransition"]["strokeCount"], 20)

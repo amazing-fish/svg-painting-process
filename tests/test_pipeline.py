@@ -52,7 +52,7 @@ class PipelineTest(unittest.TestCase):
             target = work / "painting-v7.0.svg"
             export_svg(data, target)
             self.assertTrue(target.is_file())
-            self.assertNotIn("<image", target.read_text())
+            self.assertNotIn("<image", target.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":
