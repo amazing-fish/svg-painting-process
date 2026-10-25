@@ -1,0 +1,17 @@
+{
+  "version": "7.0",
+  "pythonIntegrationTests": 11,
+  "playerAssertions": 14792,
+  "browserTest": false,
+  "ciStatus": "pending",
+  "artifacts": {
+    "htmlBytes": 44457191,
+    "htmlSHA256": "354a615b269a2dcbacda1ff250f6f2cbcff9af0563f8e5bf10c8adae4a355ef4"
+  },
+  "limitations": [
+    "library on Windows unavailable here",
+    "newly packaged HTML not browser verified",
+    "naturalness not accepted; readableProxy is only a proxy"
+  ],
+  "windowsCRLFRegression": true
+}

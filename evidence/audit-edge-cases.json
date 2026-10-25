@@ -1,0 +1,38 @@
+[
+  {
+    "input": "white",
+    "status": "ok",
+    "size": [
+      64,
+      64
+    ],
+    "guides": 4,
+    "samples": 56
+  },
+  {
+    "input": "dark",
+    "status": "ok",
+    "size": [
+      64,
+      64
+    ],
+    "guides": 5,
+    "samples": 68
+  },
+  {
+    "input": "strip",
+    "status": "ok",
+    "size": [
+      64,
+      64
+    ],
+    "guides": 7,
+    "samples": 85
+  },
+  {
+    "input": "extreme",
+    "status": "error",
+    "message": "Expected an RGB image of at least 8 by 8 pixels",
+    "exception": "ValueError"
+  }
+]

@@ -1,0 +1,101 @@
+[
+  {
+    "sample": "illustration",
+    "complete": true,
+    "strokes": 23842,
+    "guideCount": 23,
+    "layers": [
+      {
+        "layer": 1,
+        "mae": 23.947837456597224,
+        "strokes": 140,
+        "rawSeconds": 66.562
+      },
+      {
+        "layer": 2,
+        "mae": 17.841589626736113,
+        "strokes": 658,
+        "rawSeconds": 287.045
+      },
+      {
+        "layer": 3,
+        "mae": 9.994092881944445,
+        "strokes": 3336,
+        "rawSeconds": 1085.007
+      },
+      {
+        "layer": 4,
+        "mae": 3.9412521701388887,
+        "strokes": 23842,
+        "rawSeconds": 6387.539
+      }
+    ],
+    "errors": []
+  },
+  {
+    "sample": "grace_hopper",
+    "complete": true,
+    "strokes": 29446,
+    "guideCount": 34,
+    "layers": [
+      {
+        "layer": 1,
+        "mae": 31.55759548611111,
+        "strokes": 297,
+        "rawSeconds": 136.345
+      },
+      {
+        "layer": 2,
+        "mae": 24.31193576388889,
+        "strokes": 970,
+        "rawSeconds": 429.146
+      },
+      {
+        "layer": 3,
+        "mae": 11.148466796875,
+        "strokes": 5175,
+        "rawSeconds": 1613.492
+      },
+      {
+        "layer": 4,
+        "mae": 4.986792534722222,
+        "strokes": 29446,
+        "rawSeconds": 7912.177
+      }
+    ],
+    "errors": []
+  },
+  {
+    "sample": "astronaut",
+    "complete": true,
+    "strokes": 32595,
+    "guideCount": 48,
+    "layers": [
+      {
+        "layer": 1,
+        "mae": 36.6901601155599,
+        "strokes": 381,
+        "rawSeconds": 162.132
+      },
+      {
+        "layer": 2,
+        "mae": 25.19466781616211,
+        "strokes": 1329,
+        "rawSeconds": 539.326
+      },
+      {
+        "layer": 3,
+        "mae": 11.255626678466797,
+        "strokes": 6535,
+        "rawSeconds": 1956.982
+      },
+      {
+        "layer": 4,
+        "mae": 3.887811024983724,
+        "strokes": 32595,
+        "rawSeconds": 8657.347
+      }
+    ],
+    "errors": []
+  }
+]

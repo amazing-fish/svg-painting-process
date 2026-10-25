@@ -1,0 +1,20 @@
+[
+  {
+    "sample": "illustration",
+    "svgMAE": 5.2837521701388885,
+    "guides": 23,
+    "strokes": 23842
+  },
+  {
+    "sample": "grace_hopper",
+    "svgMAE": 6.486174045138889,
+    "guides": 34,
+    "strokes": 29446
+  },
+  {
+    "sample": "astronaut",
+    "svgMAE": 5.4915822347005205,
+    "guides": 48,
+    "strokes": 32595
+  }
+]
