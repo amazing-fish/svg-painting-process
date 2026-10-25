@@ -5,7 +5,7 @@
 - 仓库：`amazing-fish/svg-painting-process`，私有。
 - 已合并起点：PR [#2](https://github.com/amazing-fish/svg-painting-process/pull/2)，`main` 为 `17651f354d38624c93e3394e61e7198a08d4b4f5`；原导入分支 `bootstrap/portrait-v7` 已不作为本轮工作分支。
 - 当前工作：Issue [#3](https://github.com/amazing-fish/svg-painting-process/issues/3)，保持开放；功能分支 `fix/portrait-v7-revisit-baseline`，版本 v7.1。
-- 本轮 PR、提交与远端审查：本地实现与验证已完成，PR 待创建，远端 CI/Codex 尚未核验。 新 PR 不在创建当轮合并。
+- 本轮 PR、提交与远端审查：PR [#4](https://github.com/amazing-fish/svg-painting-process/pull/4) 已创建并保持开放；实现提交 [40697d7](https://github.com/amazing-fish/svg-painting-process/commit/40697d75bdd5f49eb7e1e9a32e74ef8641029496)。远端 CI/Codex 正在等待当前 PR HEAD 的结果，当前 HEAD 须以远端刷新为准。 新 PR 不在创建当轮合并。
 
 ## 本地基线与输出
 
@@ -45,3 +45,5 @@
 本次目视检查不通过自然度验收：头像与双人的关键关系仍不稳定，半身形体不可辨，复杂服饰仍有细碎笔迹。程序记录的粗层退化接受笔从原版 454 笔降为本次已执行范围内 0 笔，但修改版提前停止、覆盖不同，不能据此宣称自然度或泛化成功。第 100/140/185/210 笔和原始时间不足项已在对照页明确标记。
 
 失败分类：旧调度把预算耗尽当成继续换轴的条件，现已阻断；笔宽/落笔侧向通过同轴粗层反馈修复。半身首个预算阻塞轴是画布边缘的窄片段（最大半径约 7.58 像素，而粗层评估 sigma=16），显示走势/宽度与粗层尺度仍不匹配；这尚不能证明必须加入姿态模型。本轮不加入人物结构模型，保留上述失败证据供后续同清单修复。
+
+本轮最终人工决策报告位于本地 `reports/explain-diff-pr-4-v7.1.html`，不提交仓库；固定 base/head、审查阶段与结论以该报告及本地 `generated/review-cycle-v7.1.json` 为准。
