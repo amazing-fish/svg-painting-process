@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="painting-version" content="7.0">
+<title>逐笔 v7.0</title>
+<style>
+:root{font-family:Inter,"Segoe UI","Microsoft YaHei",sans-serif;color:#27342e;background:#f3f1eb;font-synthesis:none;--green:#356451;--muted:#7c8179;--line:#dfdfd5}*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0}button,input,select{font:inherit}button,select,summary{cursor:pointer}button{color:inherit}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #bd8c56;outline-offset:4px}.app{width:min(1280px,100%);margin:auto;padding:22px 30px 18px}.top-actions{display:flex;align-items:center;gap:9px}.top-actions select{max-width:180px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}h1{font-size:20px;font-weight:600;letter-spacing:.06em;margin:0}h1 small{font-size:11px;font-weight:450;letter-spacing:.02em;color:var(--muted);margin-left:10px}.quiet{border:1px solid var(--line);background:transparent;border-radius:999px;font-size:12px;padding:7px 14px}.quiet[aria-pressed="true"]{background:#e5ebe3;border-color:#9bab9c;color:var(--green)}.viewport{height:min(72vh,850px);min-height:350px;display:flex;align-items:center;justify-content:center;background:#e5e7dd;border:1px solid #dbdfd3;border-radius:5px;overflow:hidden;padding:18px}.paper{position:relative;background:#fff;box-shadow:0 4px 22px #24342612;height:100%;max-width:100%;aspect-ratio:var(--ratio,3/4);line-height:0}.paper canvas,.paper svg,.paper img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain}.paper canvas,.paper img{background:white}.paper svg{background:transparent;pointer-events:none}.paper [hidden]{display:none!important}.status{display:flex;justify-content:space-between;gap:15px;min-height:30px;padding:10px 1px 0;font-size:11px;color:var(--muted)}.transport{margin-top:13px;border-top:1px solid var(--line);padding-top:14px}.timeline-label{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}.timeline-label strong{font-weight:500;color:#4b594f}.seek{width:100%;margin:10px 0 15px;accent-color:var(--green);height:5px;cursor:pointer}.controls{display:flex;justify-content:space-between;align-items:center;gap:18px}.playback{display:flex;gap:8px;align-items:center}.button{border:1px solid #d3d8cc;background:#fafbf7;border-radius:5px;min-height:36px;padding:7px 14px;font-size:12px}.button.primary{background:var(--green);border-color:var(--green);color:white;min-width:80px}.button:disabled{opacity:.45;cursor:default}.speed{display:flex;gap:9px;align-items:center;font-size:11px;color:var(--muted)}.speed select{background:transparent;border:0;color:#465448;padding:6px 2px}.settings{margin-top:18px;font-size:11px;color:var(--muted)}.settings summary{list-style:none;text-align:right;width:max-content;margin-left:auto;padding:4px 0}.settings summary::-webkit-details-marker{display:none}.settings summary::after{content:" ＋"}.settings[open] summary::after{content:" −"}.settings-panel{margin-top:10px;border-top:1px solid var(--line);padding:15px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:16px 22px}.settings-panel label{display:flex;align-items:center;gap:9px}.settings-panel select,.settings-panel input{border:1px solid var(--line);border-radius:4px;background:#fbfbf8;color:#465448;padding:6px;font-size:11px}.settings-panel input{width:68px}.settings-panel .quiet{font-size:11px;padding:6px 10px}.hint{flex-basis:100%;margin:0;font-size:10px;line-height:1.7}.loading{position:fixed;inset:0;background:#f3f1ebf5;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;z-index:10;font-size:14px;color:#4a5d4f}.loading small{font-size:11px;color:var(--muted)}.loading[hidden]{display:none}.error{color:#a04b3a;max-width:80%;line-height:1.8;text-align:center}@media(max-width:650px){.app{padding:16px 14px}.viewport{height:65vh;min-height:300px;padding:10px}.top{margin-bottom:12px}h1{font-size:18px}.status{font-size:10px}.settings-panel{gap:13px}.button{padding:7px 11px}.controls{gap:10px}.speed{gap:4px}}
+</style>
+</head>
+<body>
+<div id="loading" class="loading" role="status"><span id="loading-label">正在展开画谱</span><small>首次打开可能需要几秒</small></div>
+<main class="app">
+  <header class="top"><h1>逐笔<small>v7.0</small></h1><div class="top-actions"><select id="sample-select" class="quiet" aria-label="选择人物示例" hidden></select><button id="reference-toggle" class="quiet" type="button" aria-pressed="false">查看原图</button></div></header>
+  <section class="viewport" id="viewport" aria-label="绘画画布"><div class="paper" id="paper"><canvas id="paint-cache" aria-hidden="true"></canvas><svg id="painting" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="正在逐笔绘制的画面"><title>逐笔绘画</title><g id="strokes"></g></svg><img id="reference" alt="原图参考" hidden></div></section>
+  <div class="status"><span id="phase-label">白纸</span><span id="seek-status" role="status" aria-live="polite"></span></div>
+  <section class="transport" aria-label="播放控制">
+    <div class="timeline-label"><span><strong id="elapsed">00:00</strong> / <span id="duration">04:00</span></span><span id="mode-label">对数播放 · 先慢后快</span></div>
+    <input id="seek" class="seek" type="range" min="0" max="240000" value="0" step="1" aria-label="绘画进度">
+    <div class="controls"><div class="playback"><button id="play" class="button primary" type="button" aria-pressed="false">播放</button><button id="restart" class="button" type="button">重置</button></div><label class="speed">倍速<select id="speed" aria-label="播放倍速"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></label></div>
+  </section>
+  <details class="settings"><summary>选项</summary><div class="settings-panel"><label>播放方式<select id="playback-mode"><option value="log" selected>对数播放</option><option value="real">原始逐笔时间</option></select></label><label id="overview-field">总览时长<input id="overview-seconds" type="number" min="60" max="900" step="30" value="240" aria-label="总览时长（秒）">秒</label><button id="download-generator" class="quiet" type="button">下载完整代码</button><p class="hint" id="mode-hint">对数播放保留原有笔序，前段慢看形体，后段逐渐加速。方向键可逐笔查看。</p></div></details>
+</main>
+<script type="text/plain" id="generator-source">__GENERATOR_SOURCE__</script>
+<script type="text/plain" id="painting-data">__PAINTING_DATA__</script>
+<script>
+'use strict';
+// The same pure geometry is embedded in the offline HTML and required by the
+// independent SVG renderer. No complete future shape is used for revelation.
+(function(root,factory){
+  const api=factory();
+  if(typeof module==='object'&&module.exports)module.exports=api;
+  else root.RibbonPrefix=api;
+})(typeof globalThis!=='undefined'?globalThis:this,function(){
+  function geometry(stroke){
+    const points=stroke.points,left=stroke.left,right=stroke.right;
+    if(!Array.isArray(points)||points.length<2||!Array.isArray(left)||!Array.isArray(right)||left.length!==points.length||right.length!==points.length)throw new Error('笔触缺少对应的中心线与左右笔缘采样');
+    let lengths;
+    if(Array.isArray(stroke.lengths)&&stroke.lengths.length===points.length&&stroke.lengths.every((v,i,a)=>Number.isFinite(v)&&(i===0||v>=a[i-1]))&&stroke.lengths[stroke.lengths.length-1]>stroke.lengths[0])lengths=stroke.lengths.map(v=>v-stroke.lengths[0]);
+    else{
+      lengths=[0];
+      for(let i=1;i<points.length;i++)lengths.push(lengths[i-1]+Math.hypot(points[i][0]-points[i-1][0],points[i][1]-points[i-1][1]));
+    }
+    // A stationary dab still advances its boundary samples in their order.
+    if(lengths[lengths.length-1]===0)lengths=points.map((_,i)=>i);
+    return{points,left,right,lengths,length:lengths[lengths.length-1]};
+  }
+  function partialRibbonD(stroke,progress,prepared){
+    const p=Math.max(0,Math.min(1,Number(progress)||0));
+    if(p<=0)return'';
+    if(p>=1)return stroke.d;
+    const g=prepared||geometry(stroke),distance=p*g.length;
+    let cut=1;
+    while(cut<g.lengths.length-1&&g.lengths[cut]<distance)cut++;
+    const fraction=(distance-g.lengths[cut-1])/(g.lengths[cut]-g.lengths[cut-1]||1);
+    const interpolate=(a,b)=>[a[0]+(b[0]-a[0])*fraction,a[1]+(b[1]-a[1])*fraction];
+    const left=g.left.slice(0,cut),right=g.right.slice(0,cut);
+    left.push(interpolate(g.left[cut-1],g.left[cut]));
+    right.push(interpolate(g.right[cut-1],g.right[cut]));
+    return'M'+left.concat(right.reverse()).map(point=>String(point[0])+','+String(point[1])).join(' L')+' Z';
+  }
+  return{geometry,partialRibbonD};
+});
+
+'use strict';
+// Presentation time is logarithmic in the original stroke timeline. Rendering
+// always receives original time, preserving the sequential stroke geometry.
+(function(root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.PaintingClock = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function() {
+  function createClock(rawDuration, overviewMs = 240000, curve = 99) {
+    const raw = Number(rawDuration), overview = Number(overviewMs), a = Number(curve);
+    if (!Number.isFinite(raw) || raw <= 0) throw new RangeError('rawDuration must be positive');
+    if (!Number.isFinite(overview) || overview <= 0) throw new RangeError('overviewMs must be positive');
+    if (!Number.isFinite(a) || a < 0) throw new RangeError('curve must be non-negative');
+    const clamp = (value, upper) => Math.max(0, Math.min(upper, Number(value) || 0));
+    const logarithm = Math.log1p(a);
+    function duration(mode = 'log') { return mode === 'real' ? raw : overview; }
+    function rawToPresentation(value, mode = 'log') {
+      const s = clamp(value, raw);
+      if (mode === 'real') return s;
+      if (s === 0) return 0;
+      if (s === raw) return overview;
+      return overview * (a === 0 ? s / raw : Math.log1p(a * s / raw) / logarithm);
+    }
+    function presentationToRaw(value, mode = 'log') {
+      const t = clamp(value, duration(mode));
+      if (mode === 'real') return t;
+      if (t === 0) return 0;
+      if (t === overview) return raw;
+      return raw * (a === 0 ? t / overview : Math.expm1(logarithm * t / overview) / a);
+    }
+    function advance(value, delta, mode = 'log', speed = 1) {
+      return presentationToRaw(rawToPresentation(value, mode) + Math.max(0, Number(delta) || 0) * Math.max(0, Number(speed) || 0), mode);
+    }
+    return { rawDuration: raw, overviewMs: overview, curve: a, duration, rawToPresentation, presentationToRaw, advance };
+  }
+  return { createClock };
+});
+
+(async () => {
+  'use strict';
+  const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg';
+  async function decode(value,text=false){
+    if(!value||value.encoding!=='gzip-base64')return value;
+    if(typeof DecompressionStream==='undefined')throw new Error('请使用支持原生 gzip 解压的现代 Chrome 或 Edge');
+    const binary=atob(value.payload),bytes=new Uint8Array(binary.length);
+    for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+    const response=new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip')));
+    return text?response.text():response.json();
+  }
+  // The large payload is inert text, not an executable JavaScript literal.
+  // Keep the per-example gzip envelopes, and decode only the selected example.
+  let packedData=JSON.parse($('painting-data').textContent);
+  $('painting-data').textContent='';
+  const bundle=await decode(packedData),paintings=Array.isArray(bundle.paintings)?bundle.paintings:[{id:'default',label:'人物示例',data:bundle}];
+  packedData=null;
+  let listenerController=null;
+  const sampleSelect=$('sample-select');
+  paintings.forEach((item,index)=>{const option=document.createElement('option');option.value=String(index);option.textContent=item.label||`示例 ${index+1}`;sampleSelect.appendChild(option);});
+  sampleSelect.hidden=paintings.length<2;
+  async function initializePainting(value){
+  window.paintingAPI?.dispose();window.paintingAPI=null;listenerController?.abort();listenerController=new AbortController();
+  $('viewport').setAttribute('aria-busy','true');$('seek-status').textContent='正在展开画谱…';
+  const on=(node,event,callback)=>node.addEventListener(event,callback,{signal:listenerController.signal});
+  const data=await decode(value);$('strokes').replaceChildren();$('painting').removeAttribute('hidden');$('paint-cache').hidden=false;$('reference').hidden=true;$('reference-toggle').textContent='查看原图';$('reference-toggle').setAttribute('aria-pressed','false');$('speed').value='1';$('playback-mode').value='log';$('overview-seconds').value='240';$('overview-field').hidden=false;
+  const strokes=data.strokes,total=Number(data.totalDuration),svg=$('painting'),group=$('strokes'),canvas=$('paint-cache');
+  if(!Array.isArray(strokes)||!strokes.length||!(total>0))throw new Error('画谱中没有可播放的笔触');
+  svg.setAttribute('viewBox',`0 0 ${data.width} ${data.height}`);
+  if(typeof Path2D==='undefined')throw new Error('此浏览器不支持 Path2D 绘画缓存');
+  canvas.width=data.width;canvas.height=data.height;
+  const context=canvas.getContext('2d',{alpha:false});
+  if(!context)throw new Error('无法建立绘画画布');
+  context.fillStyle='#ffffff';context.fillRect(0,0,data.width,data.height);
+  const activePath=document.createElementNS(NS,'path');activePath.setAttribute('stroke','none');activePath.setAttribute('visibility','hidden');group.appendChild(activePath);
+  $('paper').style.setProperty('--ratio',`${data.width}/${data.height}`);
+  $('reference').src=data.sourceDataURL||'';
+  let mode='log',overviewSeconds=240,speed=1,clock=PaintingClock.createClock(total,overviewSeconds*1000,99);
+  let cachedCount=0,time=0,completed=0,currentActive=-1;
+  let playing=false,request=0,lastFrame=0,playbackVersion=0,renderVersion=0,pendingTime=null,pendingPromise=Promise.resolve(),disposed=false;
+  const SYNC_LIMIT=8,BUILD_BUDGET=7,geometryCache=new Map(),pathCache=new Map();
+  const formatTime=ms=>{const n=Math.floor(Math.max(0,ms)/1000),hours=Math.floor(n/3600);return(hours?String(hours)+':':'')+String(Math.floor(n/60)%60).padStart(2,'0')+':'+String(n%60).padStart(2,'0');};
+  function upperBoundEnd(t){let lo=0,hi=strokes.length;while(lo<hi){const m=(lo+hi)>>>1,s=strokes[m];if(s.start+s.duration<=t)lo=m+1;else hi=m;}return lo;}
+  function targetFrame(value){
+    const t=Math.max(0,Math.min(total,Number(value)||0)),count=upperBoundEnd(t);
+    let active=-1,progress=0;
+    if(count<strokes.length){const s=strokes[count];if(t>=s.start&&t<s.start+s.duration){active=count;progress=(t-s.start)/s.duration;}}
+    return{t,count,active,progress,phase:t===0?'idle':t>=total?'done':active>=0?'drawing':count?'lift':'idle',needed:count+(active>=0&&progress>0?1:0)};
+  }
+  function geometry(index){if(geometryCache.has(index))return geometryCache.get(index);const g=RibbonPrefix.geometry(strokes[index]);geometryCache.set(index,g);if(geometryCache.size>4)geometryCache.delete(geometryCache.keys().next().value);return g;}
+  function partialRibbonD(index,p){return RibbonPrefix.partialRibbonD(strokes[index],p,geometry(index));}
+  function rasterPath(index){let path=pathCache.get(index);if(path)return path;path=new Path2D(strokes[index].d);pathCache.set(index,path);if(pathCache.size>64)pathCache.delete(pathCache.keys().next().value);return path;}
+  function drawStroke(target,index){const s=strokes[index];target.globalAlpha=s.opacity===undefined?1:s.opacity;target.fillStyle=s.color;target.fill(rasterPath(index));}
+  function getState(){return{version:'7.0',time,totalDuration:total,presentationTime:clock.rawToPresentation(time,mode),presentationDuration:clock.duration(mode),playbackMode:mode,overviewSeconds,curve:99,speed,playing,disposed,completed,activeIndex:currentActive,activeCount:currentActive>=0&&time>strokes[currentActive].start?1:0,strokeCount:strokes.length,cachedStrokes:cachedCount,renderer:'canvas2d-completed/svg-active',mountedPaths:disposed?0:1,pendingTime,rendering:pendingTime!==null,referenceVisible:!$('reference').hidden};}
+  function updateUI(frame=targetFrame(time)){
+    const shown=clock.rawToPresentation(frame.t,mode);$('seek').max=clock.duration(mode);$('seek').value=shown;
+    $('seek').setAttribute('aria-valuetext',`${formatTime(shown)}，完成${frame.count}笔`);
+    $('elapsed').textContent=formatTime(shown);$('duration').textContent=formatTime(clock.duration(mode));
+    const s=strokes[frame.active>=0?frame.active:Math.max(0,frame.count-1)],layer=data.layers?.[s?.layer];
+    $('phase-label').textContent=frame.phase==='idle'?'白纸':frame.phase==='done'?'绘制完成':layer?.name||s?.phase||'逐笔绘制';
+    $('mode-label').textContent=mode==='log'?'对数播放 · 先慢后快':'原始逐笔时间';
+  }
+  function setPending(t){pendingTime=t;$('seek-status').textContent=t===null?'':'正在定位…';$('viewport').setAttribute('aria-busy',String(t!==null));}
+  function commitFrame(frame,stage,version){
+    if(version!==renderVersion)return{...getState(),cancelled:true};
+    // Canvas and the single growing SVG mark are committed in the same task.
+    // The source photograph is never used to populate this cache.
+    if(stage){context.globalAlpha=1;context.globalCompositeOperation='copy';context.drawImage(stage.canvas,0,0);context.globalCompositeOperation='source-over';}
+    cachedCount=frame.count;
+    activePath.removeAttribute('data-active');activePath.setAttribute('visibility','hidden');activePath.setAttribute('d','');
+    if(frame.active>=0&&frame.progress>0){const s=strokes[frame.active];activePath.setAttribute('d',partialRibbonD(frame.active,frame.progress));activePath.setAttribute('fill',s.color);activePath.setAttribute('opacity',s.opacity===undefined?1:s.opacity);activePath.setAttribute('data-index',frame.active);activePath.setAttribute('visibility','visible');activePath.setAttribute('data-active','true');}
+    time=frame.t;completed=frame.count;currentActive=frame.active;setPending(null);updateUI(frame);return getState();
+  }
+  function newStage(forward){const c=document.createElement('canvas');c.width=data.width;c.height=data.height;const target=c.getContext('2d',{alpha:false});if(forward){target.drawImage(canvas,0,0);}else{target.fillStyle='#ffffff';target.fillRect(0,0,data.width,data.height);}return{canvas:c,context:target,start:forward?cachedCount:0};}
+  async function buildFrame(frame,version){const stage=newStage(frame.count>=cachedCount);let deadline=performance.now()+BUILD_BUDGET;for(let i=stage.start;i<frame.count;i++){if(version!==renderVersion)return{...getState(),cancelled:true};drawStroke(stage.context,i);if(performance.now()>=deadline){await new Promise(resolve=>setTimeout(resolve,0));deadline=performance.now()+BUILD_BUDGET;}}return commitFrame(frame,stage,version);}
+  function renderAt(value){if(disposed)return Promise.resolve({...getState(),cancelled:true});const frame=targetFrame(value),version=++renderVersion,missing=frame.count-cachedCount;if(missing<0||missing>SYNC_LIMIT){setPending(frame.t);pendingPromise=buildFrame(frame,version);return pendingPromise;}for(let i=cachedCount;i<frame.count;i++)drawStroke(context,i);const result=commitFrame(frame,null,version);pendingPromise=Promise.resolve(result);return pendingPromise;}
+  function cancelPending(){if(pendingTime!==null){renderVersion++;setPending(null);pendingPromise=Promise.resolve(getState());}}
+  function updatePlay(){$('play').textContent=playing?'暂停':'播放';$('play').setAttribute('aria-pressed',String(playing));}
+  async function tick(now,version){if(!playing||version!==playbackVersion)return;const delta=Math.max(0,now-lastFrame);lastFrame=now;await renderAt(clock.advance(time,delta,mode,speed));if(!playing||version!==playbackVersion)return;if(time>=total){pause();return;}request=requestAnimationFrame(next=>tick(next,version));}
+  function play(){if(playing||disposed)return;cancelPending();if(time>=total)renderAt(0);playing=true;const version=++playbackVersion;lastFrame=performance.now();updatePlay();request=requestAnimationFrame(now=>tick(now,version));}
+  function pause(){playing=false;playbackVersion++;cancelAnimationFrame(request);request=0;cancelPending();updatePlay();}
+  function dispose(){if(disposed)return;pause();disposed=true;renderVersion++;group.replaceChildren();geometryCache.clear();pathCache.clear();cachedCount=0;currentActive=-1;canvas.width=canvas.width;context.fillStyle='#ffffff';context.fillRect(0,0,data.width,data.height);pendingPromise=Promise.resolve();}
+  function next(){pause();const i=upperBoundEnd(time);return i<strokes.length?renderAt(strokes[i].start+strokes[i].duration):Promise.resolve(getState());}
+  function prev(){pause();const i=upperBoundEnd(time);if(i<strokes.length&&time>strokes[i].start)return renderAt(strokes[i].start);return renderAt(i?strokes[i-1].start:0);}
+  function setPlaybackMode(value){if(value!=='log'&&value!=='real')throw new RangeError('Unknown playback mode');mode=value;$('playback-mode').value=mode;$('overview-field').hidden=mode==='real';$('mode-hint').textContent=mode==='log'?'对数播放保留原有笔序，前段慢看形体，后段逐渐加速。方向键可逐笔查看。':'按每笔记录的原始时长播放。方向键可逐笔查看。';lastFrame=performance.now();updateUI();return getState();}
+  function setOverviewDuration(value){const seconds=Math.max(60,Math.min(900,Number(value)||240));overviewSeconds=seconds;clock=PaintingClock.createClock(total,seconds*1000,99);$('overview-seconds').value=seconds;lastFrame=performance.now();updateUI();return getState();}
+  function toggleReference(){const showing=$('reference').hidden;$('reference').hidden=!showing;canvas.hidden=showing;if(showing)svg.setAttribute('hidden','');else svg.removeAttribute('hidden');$('reference-toggle').textContent=showing?'返回绘画':'查看原图';$('reference-toggle').setAttribute('aria-pressed',String(showing));return showing;}
+  async function generatorSource(){const raw=$('generator-source').textContent;let value;try{value=JSON.parse(raw);}catch{return{source:raw,filename:'build_person_painting_v7.py'};}return{source:await decode(value,true),filename:value.filename||'build_person_painting_v7.py'};}
+  on($('download-generator'),'click',async()=>{const button=$('download-generator');button.disabled=true;try{const result=await generatorSource(),url=URL.createObjectURL(new Blob([result.source],{type:'text/x-python;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download=result.filename.split(/[\\/]/).pop();a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(error){button.textContent=error.message;}finally{button.disabled=false;}});
+  on($('play'),'click',()=>playing?pause():play());on($('restart'),'click',()=>{pause();renderAt(0);});on($('seek'),'input',event=>{pause();renderAt(clock.presentationToRaw(event.target.value,mode));});on($('speed'),'change',event=>{speed=Number(event.target.value);lastFrame=performance.now();});on($('playback-mode'),'change',event=>setPlaybackMode(event.target.value));on($('overview-seconds'),'change',event=>setOverviewDuration(event.target.value));on($('reference-toggle'),'click',toggleReference);
+  on(document,'keydown',event=>{if(event.target.matches('input,select,textarea,button,summary')||event.altKey||event.ctrlKey||event.metaKey)return;if(event.code==='Space'){event.preventDefault();playing?pause():play();}else if(event.key==='ArrowRight'){event.preventDefault();next();}else if(event.key==='ArrowLeft'){event.preventDefault();prev();}else if(event.key==='Home'){event.preventDefault();pause();renderAt(0);}else if(event.key==='End'){event.preventDefault();pause();renderAt(total);}});
+  on(document,'visibilitychange',()=>{if(document.hidden)pause();});
+  const ready=renderAt(0);
+  window.paintingAPI={data,renderAt,targetFrame,getState,play,pause,dispose,next,prev,setPlaybackMode,setOverviewDuration,toggleReference,partialRibbonD,getGeneratorSource:generatorSource,clock:()=>clock,whenRendered:()=>pendingPromise,ready};
+  await ready;updatePlay();$('loading').hidden=true;window.dispatchEvent(new Event('paintingready'));
+  }
+  sampleSelect.addEventListener('change',async()=>{sampleSelect.disabled=true;try{await initializePainting(paintings[Number(sampleSelect.value)].data);}catch(error){window.paintingError=error.message;$('seek-status').textContent=error.message;}finally{sampleSelect.disabled=false;}});
+  await initializePainting(paintings[0].data);
+})().catch(error=>{console.error(error);document.getElementById('loading').innerHTML='';const message=document.createElement('p');message.className='error';message.textContent='无法打开画谱：'+error.message;document.getElementById('loading').appendChild(message);window.paintingError=error.message;});
+</script>
+</body>
+</html>
