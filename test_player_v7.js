@@ -52,7 +52,9 @@ let decompressions=0;
 function CountedDecompressionStream(format){decompressions++;return new DecompressionStream(format);}
 const context={console,document,performance,Event,AbortController,setTimeout,clearTimeout,Blob,Response,DecompressionStream:CountedDecompressionStream,Path2D:MockPath2D,atob,Uint8Array,URL,requestAnimationFrame:fn=>{frames.set(++frameId,fn);return frameId;},cancelAnimationFrame:id=>frames.delete(id),dispatchEvent:events.dispatchEvent.bind(events)};
 context.window=context;context.globalThis=context;vm.createContext(context);
-let script=template.match(/<script>\n([\s\S]*?)<\/script>/)[1];
+function playerScript(text){const match=text.match(/<script>\s*([\s\S]*?)<\/script>/);assert.ok(match,'inline player script exists');return match[1];}
+let script=playerScript(template);
+check(playerScript(template.replace(/\r?\n/g,'\r\n')).replace(/\r\n/g,'\n')===script.replace(/\r\n/g,'\n'),'script extraction handles Windows CRLF');
 const firstReady=new Promise(resolve=>events.addEventListener('paintingready',resolve,{once:true}));
 vm.runInContext(script,context);
 (async()=>{

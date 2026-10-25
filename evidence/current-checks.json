@@ -1,7 +1,7 @@
 {
   "version": "7.0",
   "pythonIntegrationTests": 11,
-  "playerAssertions": 14791,
+  "playerAssertions": 14792,
   "browserTest": false,
   "ciStatus": "pending",
   "artifacts": {
@@ -12,5 +12,6 @@
     "library on Windows unavailable here",
     "newly packaged HTML not browser verified",
     "naturalness not accepted; readableProxy is only a proxy"
-  ]
+  ],
+  "windowsCRLFRegression": true
 }

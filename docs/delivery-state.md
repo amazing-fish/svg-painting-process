@@ -6,7 +6,7 @@
 - 版本：v7.0 实验版；导入分支为 `bootstrap/portrait-v7`。
 - 本地内容：自动开放走势、四阶段共享画布生成器、精简播放器与对数时间映射。
 - 工作项：Issue #1。提交使用 bootstrap/portrait-v7，PR 链接由远端同名分支查询；当前提交时审查尚未完成。
-- 本次验证：11项Python导出/集成检查与14791项播放器断言通过；后者使用模拟DOM/Canvas。三张样例的生成与独立SVG渲染历史证据在 evidence/；新打包HTML身份在 evidence/current-checks.json，未在真实浏览器验收。
+- 本次验证：11项Python导出/集成检查与14792项播放器断言通过；后者使用模拟DOM/Canvas。三张样例的生成与独立SVG渲染历史证据在 evidence/；新打包HTML身份在 evidence/current-checks.json，未在真实浏览器验收。
 - 核心限制：自动色面轴不等于人体结构理解；有限补画后仍可能离开未完成形体；模拟 DOM 测试不等于真实浏览器／帧率验证。
 - 家庭机图库：`C:\Users\Administrator\Desktop\图片\AI`，当前环境未访问，待家庭机固定样本与参数进行真实基线验证。
 - 下一步：先核实交付状态并跑图库基线，再闭合未完成走势的调度反馈；不重新扩张整条路线。
