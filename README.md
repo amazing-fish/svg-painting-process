@@ -40,6 +40,7 @@ py .\tools\render_player.py --data .\generated\v7.2-native\run\qa\painting-data.
 py .\tools\export_svg.py --data .\generated\v7.2-native\run\qa\painting-data.json --output .\generated\painting-v7.2.svg
 py -m unittest discover -s tests -v
 node .\test_player_v7.js
+py .\tools\verify_artifact_manifest.py .\artifacts\v7.2\artifact-manifest.json
 ```
 
 自动抽取不为每张图片写坐标/笔序。所有笔触共用画布、可叠加纠形，支持场不裁切绘画，不使用原图蒙版、视频或截图替代矢量。当前一笔只增长到笔尖；已完成笔用 Canvas2D Path2D 缓存相同SVG路径。

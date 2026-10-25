@@ -1,12 +1,12 @@
 {
   "version": "7.2",
   "pythonTests": {
-    "passed": 37,
-    "seconds": 1.215
+    "passed": 39,
+    "seconds": 1.196
   },
   "nonUTF8DefaultEncoding": {
-    "passed": 37,
-    "seconds": 1.23,
+    "passed": 39,
+    "seconds": 1.195,
     "defaultSimulated": "cp1252"
   },
   "playerLogicAssertions": 14796,
@@ -235,5 +235,11 @@
     "stages": 4,
     "exitCode": 0,
     "htmlValidated": true
+  },
+  "artifactByteIntegrity": {
+    "initialGitBlobMismatchReproduced": true,
+    "cause": "Git automatic CRLF to LF conversion changed uploaded HTML/SVG bytes",
+    "fix": "Canonical UTF-8 LF before hashing; artifacts/** -text; exact byte/length/SHA manifest verification added to both OS CI",
+    "gitIndexVerification": "performed before publishing the integrity-fix commit"
   }
 }
