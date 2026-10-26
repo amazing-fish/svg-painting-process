@@ -1,0 +1,81 @@
+{
+  "version": "v8.1",
+  "generatingExperiment": "portrait-coarse-v8.1",
+  "dataSchemaVersion": "7.2",
+  "playerVersion": "7.2",
+  "sourceCommit": "e393e3cd7473e607b6a6061d141b027b57d73f3d",
+  "frozenInput": {
+    "filename": "painting-data.json",
+    "sha256": "dd1c2091d7b3d6caf0dd62c9516a001f7d724e618e6061620693e598528e107d"
+  },
+  "sourceImageSHA256": "bbeb4acc9f17aed429d0264e28d82e4b9d9e79beeb73b0693d1391b404381f93",
+  "strokes": 64,
+  "rawTimelineMs": 59971,
+  "headTransferMs": 42855,
+  "stoppedGuide": 16,
+  "complete": false,
+  "semanticAcceptance": false,
+  "stage1Entered": false,
+  "strokesUnchanged": true,
+  "first32EqualToOld41": true,
+  "referencePreviewIncluded": true,
+  "originalImageFileIncluded": false,
+  "explicitInputsIncluded": false,
+  "sourceArchive": {
+    "filename": "source-portrait-coarse-v8.1.zip",
+    "sha256": "fca1f3b83a2b5ff9b60135e87ca291c112c594652ba4f294e4e777e0234fb92e",
+    "files": {
+      "SOURCE-README.md": "a490a164576bfcc40c9699f75334cd994ba52ee5a561dbc015f925837321bfdf",
+      "auto_guides.py": "e6034a23baa49dce8269357acd3b5344fee761a83ccbee53149a3bfae788c28c",
+      "build_portrait.py": "a04d0a2469ab572ef3fbbc75add351aadd94b6764c419f82a47a90605416c34f",
+      "construction_episodes.py": "f273af9a770c609c5d1ce88b02f47e2a43237e83d2d3aec20e55617162cdc945",
+      "experiments/portrait_coarse/README.md": "8f05c6d6265d898135e89bf12b3c62034f0eb0c356d4f8ccb2df67edcd83a3d3",
+      "experiments/portrait_coarse/__init__.py": "632f4423812f299a40f67fb22dfb0efb0da40250eaeeb84c42449f59401be0f2",
+      "experiments/portrait_coarse/__main__.py": "c8d241f23f3104ff748a2137ed133cf496ba61600537ec44eab591560f4b9e6f",
+      "experiments/portrait_coarse/canonical.py": "a3a8227cf43fdd1307ecc501e88bb611bfb207c38d00e9620b4994a7a9d15010",
+      "experiments/portrait_coarse/construction.py": "3324d71f2c0cb0c31fdf2dd0a9904358ba46d83534c61259ef14509acee3edde",
+      "experiments/portrait_coarse/contracts.py": "2545a56b0722040510216d4f25b762e3d671e75ea4e7594139ffd2800376fe40",
+      "experiments/portrait_coarse/energy.py": "e721fe188e3fb44fdc5a2a867350c15dd963c337ba34cb77b7a020491255a7d5",
+      "experiments/portrait_coarse/physical.py": "7f85675cab21df41e3c35b7e7ea83b453aeb7eb54865e9bc905b79bbbd16f26a",
+      "experiments/portrait_coarse/runner.py": "fd3beb8a61992cee53226a11e3df06c03f6e358cdfa2241cf31eeab631f4e1d2",
+      "experiments/portrait_coarse/safety.py": "424480cc6f8640980f3ee6ba1b7b67dc14e918e725ceaa2ae56432aef95c1763",
+      "global_plan.py": "ddb952f18dc4e377f6a827c4af1e16aaf072684beb05c28b2972f06ead6ea872",
+      "requirements.txt": "a9afc3d39df73e25f5158500c52b25a8cc7bb7fdf94a87f8e569b4fa6343eec1",
+      "tools/export_svg.py": "2941bf75d954f0eadd873bc223e3f21d5a7c8dd95690bf2def07510758c308a2"
+    }
+  },
+  "metadataRedactions": [
+    {
+      "field": "/experiment/explicitInputs/source",
+      "publicValue": "inputs/2f22ad27-e747-4500-b975-345352f21ba7.png"
+    },
+    {
+      "field": "/experiment/explicitInputs/guides",
+      "publicValue": "inputs/guides.json"
+    },
+    {
+      "field": "/experiment/explicitInputs/provenance",
+      "publicValue": "inputs/provenance.json"
+    },
+    {
+      "field": "/experiment/canonicalGeometry/enabledGuides/0/origin/path",
+      "publicValue": "inputs/hybrid-guides.json"
+    },
+    {
+      "field": "/experiment/canonicalGeometry/enabledGuides/1/origin/path",
+      "publicValue": "inputs/hybrid-guides.json"
+    }
+  ],
+  "historicalComparisons": {
+    "old41": {
+      "strokes": 41,
+      "rawTimelineMs": 43645,
+      "sha256": "d92b0a7a8fe1160a8e0bf7d0d7bbee194bedda105a43bb4ba0fccefcf0fa020e"
+    },
+    "trueV6": {
+      "strokes": 676,
+      "rawTimelineMs": 395429,
+      "sha256": "1597dedf02bcaf5482923522bb1566f0232b36872c7017756a4ab9327e31e7f3"
+    }
+  }
+}
