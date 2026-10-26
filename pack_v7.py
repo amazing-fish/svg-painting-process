@@ -3,9 +3,11 @@ from pathlib import Path
 import base64
 import gzip
 import json
+import inspect
 
 ROOT = Path(__file__).resolve().parent
 DELIVERY = ROOT / 'delivery'
+GENERATOR_VERSION = '7.2'
 
 
 def envelope(raw, filename=None):
@@ -13,6 +15,31 @@ def envelope(raw, filename=None):
     if filename:
         value['filename'] = filename
     return json.dumps(value, ensure_ascii=False, separators=(',', ':'))
+
+
+def package_player(template, painting_payload, generator_payload):
+    """Fill the two inert payload containers, never executable source text."""
+    import re
+    for element, marker, payload in (("painting-data", "__PAINTING_DATA__", painting_payload),
+                                     ("generator-source", "__GENERATOR_SOURCE__", generator_payload)):
+        pattern = re.compile(r'(<script\b[^>]*\sid\s*=\s*([\'"])' + re.escape(element) +
+                             r'\2[^>]*>)(.*?)(</script\s*>)', re.I | re.S)
+        matches = list(pattern.finditer(template))
+        if len(matches) != 1:
+            raise ValueError(element + " must have exactly one script container")
+        if matches[0].group(3).strip() != marker:
+            raise ValueError(element + " must contain its unfilled payload marker")
+        try:
+            value = json.loads(payload)
+        except (ValueError, TypeError) as error:
+            raise ValueError(element + " payload must be valid JSON") from error
+        if not isinstance(value, dict):
+            raise ValueError(element + " payload must be a JSON object")
+        # A payload string must not close its inert script container. Legitimate
+        # example marker text elsewhere in the source is deliberately untouched.
+        encoded = json.dumps(value, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c')
+        template = pattern.sub(lambda match: match.group(1) + encoded + match.group(4), template, count=1)
+    return template
 
 
 def complete_source():
@@ -30,10 +57,10 @@ def complete_source():
         pieces.append(source)
     template = (ROOT / 'player_v7.html').read_text(encoding='utf-8')
     encoded = base64.b64encode(gzip.compress(template.encode(), mtime=0)).decode()
-    header = '''# portrait-painting-v7.0.py -- complete offline automatic portrait painter
+    header = '''# portrait-painting-v7.2.py -- complete offline automatic portrait painter
 # Windows PowerShell:
 #   py -m pip install numpy scipy opencv-python-headless Pillow
-#   py .\\portrait-painting-v7.0.py --source .\\person.jpg --output .\\person-painting-v7.0.html
+#   py .\\portrait-painting-v7.2.py --source .\\person.jpg --output .\\person-painting-v7.2.html
 # All guide coordinates come from the selected image. No per-image tuning is required.
 # Classical image structure is used, not a trained pose/anatomy model.
 from __future__ import annotations
@@ -47,37 +74,42 @@ def _envelope_v7(raw, filename=None):
 
 def main():
     import tempfile
-    parser=argparse.ArgumentParser(description='Automatic portrait painting v7.0 and offline player')
+    parser=argparse.ArgumentParser(description='Automatic portrait painting v7.2 and offline player')
     parser.add_argument('--source',type=Path,required=True,help='Any local RGB/RGBA portrait or figure image')
-    parser.add_argument('--output',type=Path,default=Path('portrait-painting-v7.0.html'))
+    parser.add_argument('--output',type=Path,default=Path('portrait-painting-v7.2.html'))
     parser.add_argument('--max-edge',type=int,default=768,help='Analysis/rendering resolution, default 768px longest side')
     args=parser.parse_args()
     if not 128<=args.max_edge<=2048:parser.error('--max-edge must be between 128 and 2048')
     with tempfile.TemporaryDirectory(prefix='portrait-v7-') as temporary:
-        generate(args.source,Path(temporary),args.max_edge,4)
+        painter=generate(args.source,Path(temporary),args.max_edge,4)
         data=json.loads((Path(temporary)/'qa/painting-data.json').read_text(encoding='utf-8'))
     template=gzip.decompress(base64.b64decode(PLAYER_TEMPLATE_V7)).decode()
     full_source=Path(__file__).read_text(encoding='utf-8')
-    output=template.replace('__PAINTING_DATA__',_envelope_v7(json.dumps(data,ensure_ascii=False,separators=(',',':')).encode()))
-    output=output.replace('__GENERATOR_SOURCE__',_envelope_v7(full_source.encode(),'portrait-painting-v7.0.py'))
+    output=package_player(template,_envelope_v7(json.dumps(data,ensure_ascii=False,separators=(',',':')).encode()),
+                          _envelope_v7(full_source.encode(),'portrait-painting-v7.2.py'))
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(output,encoding='utf-8')
     print('Saved '+str(args.output.resolve()),flush=True)
+    if getattr(painter,'construction_blocked',None):
+        print(json.dumps(dict(status='incomplete',blocked=painter.construction_blocked)),flush=True)
+        raise SystemExit(1)
 
 if __name__=='__main__':main()
 '''
-    source = header + '\n\n'.join(pieces) + '\n\nPLAYER_TEMPLATE_V7 = ' + repr(encoded) + '\n' + footer
-    compile(source, 'portrait-painting-v7.0.py', 'exec')
+    source = header + '\n' + inspect.getsource(package_player) + '\n' + '\n\n'.join(pieces) + '\n\nPLAYER_TEMPLATE_V7 = ' + repr(encoded) + '\n' + footer
+    compile(source, 'portrait-painting-v7.2.py', 'exec')
     return source
 
 
 def main():
     DELIVERY.mkdir(exist_ok=True)
     source = complete_source()
-    (DELIVERY / 'portrait-painting-v7.0.py').write_text(source, encoding='utf-8')
+    (DELIVERY / 'portrait-painting-v7.2.py').write_text(source, encoding='utf-8')
     items = []
     for name, label in [('illustration', '原插画'), ('grace_hopper', '人物照 · Hopper'), ('astronaut', '人物照 · 宇航员')]:
         data = json.loads((ROOT / 'runs' / name / 'qa/painting-data.json').read_text(encoding='utf-8'))
+        if data.get('version') != GENERATOR_VERSION:
+            raise ValueError(name + ': regenerate with v' + GENERATOR_VERSION + ' before packaging')
         if len(data['layers']) != 4:
             raise RuntimeError(name + ' is not complete')
         # Compact each stroke's genuine geometry; do not quantize or replace it.
@@ -88,13 +120,11 @@ def main():
         for key in ('constructionReports','routeDiagnostics','stageEvents'):
             data.pop(key, None)
         items.append(dict(id=name, label=label, data=json.loads(envelope(json.dumps(data,ensure_ascii=False,separators=(',',':')).encode()))))
-    bundle = dict(version='7.0', paintings=items)
+    bundle = dict(version=GENERATOR_VERSION, paintings=items)
     template = (ROOT / 'player_v7.html').read_text(encoding='utf-8')
-    html = template.replace('__PAINTING_DATA__', json.dumps(bundle,ensure_ascii=False,separators=(',',':')))
-    html = html.replace('__GENERATOR_SOURCE__', envelope(source.encode(), 'portrait-painting-v7.0.py'))
-    if '__PAINTING_DATA__' in html or '__GENERATOR_SOURCE__' in html:
-        raise RuntimeError('Unfilled template')
-    target = DELIVERY / 'portrait-painting-v7.0.html'
+    html = package_player(template, json.dumps(bundle,ensure_ascii=False,separators=(',',':')),
+                          envelope(source.encode(), 'portrait-painting-v7.2.py'))
+    target = DELIVERY / 'portrait-painting-v7.2.html'
     target.write_text(html, encoding='utf-8')
     print(json.dumps(dict(file=str(target),bytes=target.stat().st_size,samples=[p['id'] for p in items]),ensure_ascii=False))
 

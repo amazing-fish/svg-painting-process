@@ -1,67 +1,52 @@
-# SVG Painting Process · v7.0 实验版
+# SVG Painting Process · v7.2
 
-目标是把人物图片转换为可检查、可逐笔回放的 SVG 绘画过程。先让底形和大明暗成立，再塑造体积与细节；最终相似度和绘画过程自然度分别验收。
+[打开可播放 HTML 产物入口](artifacts/v7.2/index.html) · [v6 的 20 条走势对照](artifacts/v7.2/guides/v6-open-guide-comparison-v7.2.html)
 
-v7.0 已用图像算法替代 v6 针对单张插画手写的 20 条走势：低频色面分析 → 开放主轴与宽度 → 邻近访问顺序 → 四阶段绘制。所有笔触共用画布，分析色面不会成为封闭绘画遮罩。当前实现是探索基线，尚不能理解人体解剖、衣物结构或遮挡关系。
+当前仅做人物。**以 v6 原参考图与指定走势为效果基线；v7.2 自动算法仍未达到它。** 不能把能生成文件、代理分数或最终 MAE 当作形体与绘画过程验收通过。
 
-## Windows PowerShell 快速开始
+## 本次交付
+
+- 原参考图确为图库的 `2f22ad27-e747-4500-b975-345352f21ba7.png`，SHA256 `bbeb4acc9f17aed429d0264e28d82e4b9d9e79beeb73b0693d1391b404381f93`。
+- 原样复现 v6 三个归档模块，1086×1448、不缩图；前两阶段累计 196/676 笔，总耗时 99.734 秒。其 20 条开放轴和真实访问顺序单独保存，只作基线，未输入自动算法。
+- 同图、同原生尺寸比较 v6、v7.1 和 v7.2；逐条显示开放轴、方向、笔宽、访问次序与覆盖。v6 最初三条轴的最近自动匹配覆盖仅 0%/37.5%/0%，当前不能模拟 v6 的初始走势。
+- 删除 v7 特有的网格铺色前奏：旧版样例3前73笔都是长宽比约1.317的粗方块，v6没有这段。新版本直接沿自动开放轴落笔；自动轴仍过宽且缺腿部整段走势，本轮未宣称解决。
+- v7.2 原生同图实际在底形第13条轴阻塞，保留88笔部分过程，不进入后续精修。局部分支实验也未复原关键走势，因此未混入产品。
+- 修复误开 `player_v7.html` 源码模板时的占位解析错误；该文件是模板，不是作品。它现在明确提示并指向产物入口。所有实际打包入口严格填充指定画谱/源码容器，拒绝缺失、重复或错误占位。
+
+## 打开与上传
+
+`artifacts/v7.2/` 是本轮实际提交的 HTML、SVG 静帧、测量 JSON 和对应源码 ZIP，克隆或下载后打开其中 `index.html`。GitHub 文件页展示的是源码；要本地播放，请下载目录或仓库后打开 HTML。GitHub Pages 尚未部署。
+
+门户包含 v6 原生基线、v7.1 原生底形检查点、v7.2 当前失败结果、同原始时间过程对照、20条轴对照，以及前轮5例640基线的失败证据。历史引擎、画谱与播放器版本分别标明，源码链接指向对应引擎，不把旧画谱误标成当前算法生成。
+
+用户已明确要求上传 HTML；因此上传这些选定产物及其内嵌参考预览。原始图库、整库和本地诊断缓存不上传。原5例640结果不能冒充本次1086×1448对照。
+
+## Windows PowerShell
+
+使用 Python 3.12；本机没有 `py` 时用 `.\.venv\Scripts\python.exe`。
 
 ```powershell
-git clone https://github.com/amazing-fish/svg-painting-process.git
-Set-Location .\svg-painting-process
-# 初次交付仍在 PR 中时，先检出实际交付分支；先核实 PR 状态。
-git switch bootstrap/portrait-v7
 py -m pip install -r requirements.txt
 
-# 生成四阶段、笔迹数据和自动走势。
-py .\build_portrait.py --source 'C:\Users\Administrator\Desktop\图片\AI\人物.jpg' --work-dir .\generated\person --max-edge 768 --through 4
+# v6原样隔离复现，仅适用于上述原参考图，不是通用人物算法。
+py .\tools\v6_baseline.py --source 'C:\Users\Administrator\Desktop\图片\AI\2f22ad27-e747-4500-b975-345352f21ba7.png' --output .\generated\v6-baseline-v7.2 --through 2
 
-# 打包离线播放器；页面可下载内嵌的完整单文件生成代码。
-py .\tools\render_player.py --data .\generated\person\qa\painting-data.json --output .\generated\person-painting-v7.0.html
+# 当前自动算法，同原图/原生尺寸请求前两阶段；粗层失败会保留JSON并返回1。
+py .\build_portrait.py --source 'C:\Users\Administrator\Desktop\图片\AI\2f22ad27-e747-4500-b975-345352f21ba7.png' --work-dir .\generated\v7.2-native\run --max-edge 1448 --through 2
 
-# 导出最终静态 SVG；可加 --time-ms 导出原始时间轴指定帧。
-py .\tools\export_svg.py --data .\generated\person\qa\painting-data.json --output .\generated\person-painting-v7.0.svg
-```
+# 当前同版本画谱打包；不要直接打开源码模板。
+py .\tools\render_player.py --data .\generated\v7.2-native\run\qa\painting-data.json --output .\generated\portrait-painting-v7.2.html
 
-将 `人物.jpg` 换成真实文件名。首次家庭机图库验收尚未执行；请先固定选样清单与参数，再作同条件比较：
-
-```powershell
-# 按相对路径排序选前 5 张，仅生成带 SHA256 的固定清单；不会识别图片内容。
-py .\tools\gallery_baseline.py --gallery 'C:\Users\Administrator\Desktop\图片\AI' --output .\generated\gallery-v7.0 --limit 5 --list-only
-
-# 复用同一清单，先检查前两阶段；完整四阶段使用 --through 4。
-py .\tools\gallery_baseline.py --gallery 'C:\Users\Administrator\Desktop\图片\AI' --output .\generated\gallery-v7.0 --manifest .\generated\gallery-v7.0\manifest-v7.0.json --max-edge 640 --through 2
-```
-
-批量入口输出 HTML、SVG 与运行清单。排序选样不保证全是人物；家庭机须先确认清单是否适合作为人物测试集，再固定后续比较样本。可手动整理清单中的代表样本，保留对应文件相对路径和 SHA256 后用 `--manifest` 复跑。图库图片和生成物默认不进 Git。
-
-## 播放器
-
-默认界面只留画布、原图切换、播放／暂停、进度、倍速与版本。时间方式、总览时长和源码下载收进“选项”。
-
-对数播放保持笔序不变，将原始画谱时间 `s` 映射成展示时间 `t`：
-
-```text
-t = T · ln(1 + 99s/D) / ln(100)
-```
-
-`D` 是原始总时长，`T` 默认 240 秒。前段慢看铺形，后段逐渐加速；后期一帧可能完成多笔。需要逐笔观察时切换原始时间或使用方向键。切换时间模式保留当前画面。
-
-笔迹数据保存完整 SVG 路径。为控制大量 DOM 节点，已完成笔触由 Canvas2D `Path2D` 缓存相同 SVG 几何，当前笔触用真实增长的 SVG 几何显示。这是混合回放渲染，不是原图蒙版显露。
-
-## 验证与已知差距
-
-同一算法和参数已在原插画、Grace Hopper 人物照、astronaut 人物照三张样例上跑通，无逐图人工走势坐标。这三张样例不是用户本机图库验收，也不足以证明任意人物图片都能自然绘制。
-
-当前关键缺口：粗形检查未通过时，调度器只追加一次有限补画，之后仍可能换走势。因此仍可能出现“形体尚不可辨就离开”。下一任务优先闭合这项调度反馈，再考虑人物结构提示。最终像素相似度不能替代早期过程验收。
-
-没有生成模型或远程模型服务依赖；OpenCV 内置 Haar 正脸分类器属于本地预训练模型，仅作注意提示，不是人体结构识别。
-
-```powershell
+py .\tools\export_svg.py --data .\generated\v7.2-native\run\qa\painting-data.json --output .\generated\painting-v7.2.svg
+py -m unittest discover -s tests -v
 node .\test_player_v7.js
-py -m compileall .\auto_guides.py .\build_portrait.py .\global_plan.py .\construction_episodes.py
+py .\tools\verify_artifact_manifest.py .\artifacts\v7.2\artifact-manifest.json
 ```
 
-播放器逻辑测试使用模拟 DOM／Canvas；真实浏览器验证必须单独记录版本与证据，不能由测试数量推断帧率。
+自动抽取不为每张图片写坐标/笔序。所有笔触共用画布、可叠加纠形，支持场不裁切绘画，不使用原图蒙版、视频或截图替代矢量。当前一笔只增长到笔尖；已完成笔用 Canvas2D Path2D 缓存相同SVG路径。
 
-方案见 [architecture.md](docs/architecture.md)，后续工作见 [roadmap.md](docs/roadmap.md)，交付状态见 [delivery-state.md](docs/delivery-state.md)。
+独立 SVG 是静帧，完整过程由 HTML 播放。对数映射 `t=T·ln(1+99s/D)/ln(100)` 保留原笔序；可切原始时间、逐笔定位、暂停/恢复与原图参考。后期对数播放不保证每笔肉眼可辨。
+
+`needsRevisit` 反馈和5笔有界补画继续保留。预算未就绪停止当前及后续阶段；无安全改善明确记录为停滞，不能当作形体成功。`constructionBlocked` 与 `layers[].complete=false` 标记部分产物。
+
+方案与实际限制见 [architecture.md](docs/architecture.md)，当前记录见 [delivery-state.md](docs/delivery-state.md)。

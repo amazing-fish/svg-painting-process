@@ -1,0 +1,105 @@
+{
+  "version": "7.2",
+  "referenceSHA256": "bbeb4acc9f17aed429d0264e28d82e4b9d9e79beeb73b0693d1391b404381f93",
+  "referenceSize": [
+    1086,
+    1448
+  ],
+  "baseline": "archived v6.0 with original 20 manual movements and actual visit order; manual coordinates are evaluation only",
+  "baselineResult": {
+    "version": "6.0",
+    "sourceSHA256": "bbeb4acc9f17aed429d0264e28d82e4b9d9e79beeb73b0693d1391b404381f93",
+    "sourceSize": [
+      1086,
+      1448
+    ],
+    "parameters": {
+      "resolution": "native; no resize",
+      "through": 2
+    },
+    "seconds": 99.734,
+    "stageSeconds": [
+      23.701,
+      75.744
+    ],
+    "strokes": 676,
+    "layers": [
+      {
+        "stage": "composition",
+        "strokes": 196,
+        "rawEndMs": 148995,
+        "mae": 21.8461
+      },
+      {
+        "stage": "value",
+        "strokes": 676,
+        "rawEndMs": 395429,
+        "mae": 19.3583
+      }
+    ],
+    "sourceSpecificManualBaseline": true,
+    "naturalnessAccepted": false,
+    "archiveSourceSHA256": {
+      "build_scene.py": "3aeac55a67151af20eedc76cb3811fe5380d025f59a0f316432f3fe9f9e180f2",
+      "global_plan.py": "13a376e4daf5f5eea154fc7d47f2ccce964d1b7d17d1a7a6ef7ad3e15a8ffc7a",
+      "construction_episodes.py": "016be33f25c5743a4c9db2a87f513e4d8bdedf2b7490ea168df696bc47e9444e"
+    }
+  },
+  "automaticReferenceResult": {
+    "requestedThrough": 2,
+    "completedStages": 0,
+    "savedStrokes": 88,
+    "secondsComposition": 87.5,
+    "blockedGuide": 13,
+    "initialAxesMatchV6": false,
+    "axisExtractorChangedFromV71": false
+  },
+  "firstThreeManualAxes": [
+    {
+      "manualRank": 1,
+      "manualIndex": 2,
+      "automaticRank": 17,
+      "coverageWithinManualRadius": 0.0,
+      "widthRatio": 0.8281,
+      "tangentAngleDegrees": 5.75
+    },
+    {
+      "manualRank": 2,
+      "manualIndex": 4,
+      "automaticRank": 17,
+      "coverageWithinManualRadius": 0.375,
+      "widthRatio": 0.5555,
+      "tangentAngleDegrees": 17.26
+    },
+    {
+      "manualRank": 3,
+      "manualIndex": 3,
+      "automaticRank": 4,
+      "coverageWithinManualRadius": 0.0,
+      "widthRatio": 3.2362,
+      "tangentAngleDegrees": 33.56
+    }
+  ],
+  "manualAxes": 20,
+  "distinctAutomaticMatches": 11,
+  "gridRegression": {
+    "old640PreludeStrokes": 73,
+    "oldNativePreludeStrokes": 66,
+    "aspectRatio": 1.317,
+    "widthFractionOfLongestSide": 0.13735,
+    "v72PreludeRemoved": true
+  },
+  "openFailures": [
+    "Automatic planner does not reproduce initial v6 leg trajectories or visit order.",
+    "No-wash improves the initial geometric behavior but still produces a too-wide merged mass and blocks before finishing composition.",
+    "Unaccepted medial-branch experiments remain local and are not part of production."
+  ],
+  "htmlError": {
+    "cause": "Unfilled source template was opened as an artifact",
+    "fix": "Friendly template entry and strict two-container packaging validation"
+  },
+  "htmlUploadAuthorizedThisTurn": true,
+  "galleryUploadScope": "selected artifact HTML with embedded reference previews only; not the full original gallery",
+  "pagesDeployed": false,
+  "qualityAccepted": false
+}

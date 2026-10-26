@@ -26,7 +26,7 @@ from PIL import Image, ImageDraw, ImageOps
 
 ROOT=Path(__file__).resolve().parent
 OUT,QA=ROOT/'output',ROOT/'qa'
-VERSION='7.0'
+VERSION='7.2'
 cv2.setNumThreads(1)
 STAGES=('composition','value','volume','detail')
 PHASES=[('连贯底形','顺着开放走势铺通主面，再建立主要转折'),
@@ -161,43 +161,7 @@ class SharedCanvasPainter:
         self.strokes.append(s);self.clock+=duration+pause;return True
 
     def compose(self):
-        self.base_wash()
-        self.construction_sequence(0)
-
-    def base_wash(self):
-        """Overlapping full brush strokes establish image-wide values first."""
-        scale=max(self.w,self.h)
-        spacing=max(12.,scale*.067);width=spacing*2.05
-        target=cv2.GaussianBlur(self.src,(0,0),max(2.,scale*.023))
-        gray=cv2.cvtColor(target,cv2.COLOR_RGB2GRAY).astype(np.float32)
-        gx=cv2.Sobel(gray,cv2.CV_32F,1,0);gy=cv2.Sobel(gray,cv2.CV_32F,0,1)
-        xx=cv2.GaussianBlur(gx*gx,(0,0),3.);yy=cv2.GaussianBlur(gy*gy,(0,0),3.);xy=cv2.GaussianBlur(gx*gy,(0,0),3.)
-        broad_angle=.5*np.arctan2(2*xy,xx-yy)+np.pi/2
-        broad_coherence=np.sqrt((xx-yy)**2+4*xy*xy)/(xx+yy+1.e-8)
-        ys,xs=np.mgrid[spacing*.22:self.h:spacing*.84,spacing*.22:self.w:spacing]
-        seeds=np.column_stack((xs.ravel(),ys.ravel()))
-        ix=np.minimum(self.w-1,np.rint(seeds[:,0]).astype(int));iy=np.minimum(self.h-1,np.rint(seeds[:,1]).astype(int))
-        scores=np.max(np.abs(255.-target[iy,ix].astype(float)),axis=1)
-        active=scores>8;seeds=seeds[active];scores=scores[active]
-        order,diag=attention_route(seeds,scores,self.w,self.h,window_radius=scale*.25,bundle_size=12)
-        for pos,index in enumerate(order):
-            x,y=seeds[index];px,py=self.pixel(x,y)
-            if np.max(np.abs(self.canvas[py,px].astype(float)-target[py,px]))<12:continue
-            theta=float(broad_angle[py,px]) if broad_coherence[py,px]>.25 else 0.
-            vec=np.array([math.cos(theta),math.sin(theta)])
-            length=spacing*2.7
-            points=np.array([np.array([x,y])+vec*t for t in np.linspace(-length/2,length/2,9)])
-            radii=np.full(len(points),width/2);radii[[0,-1]]*=.75
-            left,right=edges(points,radii);fp=self.footprint(left,right)
-            if fp is None:continue
-            (x0,y0,x1,y1),a=fp
-            wanted=(target[y0:y1,x0:x1]*a[:,:,None]).sum(axis=(0,1))/max(1.,a.sum())
-            color,sample=self.choose_color(wanted,None,12)
-            old=self.canvas[y0:y1,x0:x1].astype(float);truth=target[y0:y1,x0:x1].astype(float)
-            new=old*(1-a[:,:,None])+np.array(color)*a[:,:,None]
-            gain=float(((old-truth)**2-(new-truth)**2).sum())
-            if gain>max(3.,a.sum()*3.):
-                self.put(points,radii,color,sample,0,'plane',1.,f'wash-{diag["bundleIds"][pos]}',fp)
+        return self.construction_sequence(0)
 
     def construction_sequence(self,layer):
         # This is a list of open drawing movements, not source regions. Nearby
@@ -212,10 +176,22 @@ class SharedCanvasPainter:
                 # A stalled continuation remains explicitly unresolved; it is
                 # never labelled complete merely because a budget was spent.
                 follow=paint_construction_episode(self,i,layer=layer,palette_size=28 if layer==0 else 96,
-                                                  max_strokes=5,max_rounds=1)
+                                                  max_strokes=5,max_rounds=1,feedback=report)
                 follow['continuationOf']=len(self.construction_reports)-1
                 self.construction_reports.append(follow)
                 print(json.dumps(dict(stage=STAGES[layer],guide=i,continuation=True,accepted=follow['accepted'],status=follow['status'],after=follow['after']),ensure_ascii=False),flush=True)
+                report=follow
+            # A move is now an explicit scheduling decision. Unresolved axes
+            # stay visible with their stop reason; budget is never success.
+            report['transitionDecision']=('proxy_ready' if not report['needsRevisit'] else
+                                          'stalled_unresolved' if report['status']=='no_improvement' else
+                                          'blocked_unresolved')
+            if report['transitionDecision']=='blocked_unresolved':
+                self.construction_blocked=dict(layer=layer,guideIndex=i,
+                    reportIndex=len(self.construction_reports)-1,
+                    reason='repair_budget_exhausted_before_coarse_ready')
+                return False
+        return True
 
     def direction(self,x,y,layer):
         ix,iy=self.pixel(x,y)
@@ -316,10 +292,11 @@ class SharedCanvasPainter:
 
     def paint_phase(self,layer):
         start=len(self.strokes);starttime=self.clock
-        if layer==0:self.compose()
+        complete=True
+        if layer==0:complete=self.compose()
         elif layer==1:
-            self.construction_sequence(1)
-            self.refine_pass(1)
+            complete=self.construction_sequence(1)
+            if complete:self.refine_pass(1)
         else:self.refine_pass(layer)
         evidence=self.low_frequency_evidence()
         if layer==2 and min(v['reduction'] for v in evidence.values())<.62:
@@ -330,18 +307,20 @@ class SharedCanvasPainter:
             self.refine_pass(3,extra=True)
             evidence=self.low_frequency_evidence()
         mae=float(np.abs(self.canvas.astype(float)-self.src.astype(float)).mean())
-        info=dict(name=PHASES[layer][0],description=PHASES[layer][1],stage=STAGES[layer],startTime=starttime,
+        info=dict(name=PHASES[layer][0],description=PHASES[layer][1],stage=STAGES[layer],startTime=starttime,complete=complete,
                   endTime=self.clock,endIndex=len(self.strokes),added=len(self.strokes)-start,mae=round(mae,4),
                   lowFrequency=evidence,previewDataURL=image_url(self.canvas))
         self.layers.append(info);self.events.append(dict(stage=STAGES[layer],start=starttime,end=self.clock))
         Image.fromarray(self.canvas).save(OUT/f'layer-{layer+1}.png')
         self.export();print(json.dumps(dict(layer=layer+1,added=info['added'],total=len(self.strokes),mae=mae,lowFrequency=evidence)),flush=True)
+        return complete
 
     def export(self):
         report=validate_timeline(self.events,self.strokes,require_complete=len(self.layers)==4)
         data=dict(width=self.w,height=self.h,layers=self.layers,strokes=self.strokes,sourceDataURL=image_url(self.src,720),
                   totalDuration=self.clock,stageEvents=self.events,planValidation=report,constructionReports=self.construction_reports,
-                  version=VERSION,automaticGuides=self.guide_metadata,metrics=dict(totalPaths=len(self.strokes),sourceSize=[self.w,self.h],finalMAE=self.layers[-1]['mae'],
+                  version=VERSION,constructionBlocked=getattr(self,'construction_blocked',None),
+                  automaticGuides=self.guide_metadata,metrics=dict(totalPaths=len(self.strokes),sourceSize=[self.w,self.h],finalMAE=self.layers[-1]['mae'],
                   method='pixel-derived automatic open guides; shared canvas; no hand-authored coordinates; whole brush footprints',
                   brush='true growing ribbon geometry; unmasked paint can cross and cover earlier marks',routeDiagnostics=self.routes))
         (QA/'painting-data.json').write_text(json.dumps(data,separators=(',',':'),ensure_ascii=False),encoding='utf-8')
@@ -354,21 +333,25 @@ def generate(source,work_dir,max_edge=768,through=4):
     painter=SharedCanvasPainter(source,max_edge=max_edge)
     (QA/'automatic-guides.json').write_text(json.dumps(dict(gestures=[(p.tolist(),r.tolist()) for p,r in painter.guides],metadata=painter.guide_metadata),ensure_ascii=False,indent=2),encoding='utf-8')
     for layer in range(through):
-        started=time.time();painter.paint_phase(layer)
+        started=time.time();complete=painter.paint_phase(layer)
         print(f'Automatic pass {layer+1} rendered in {time.time()-started:.1f}s',flush=True)
+        if not complete:break
     painter.export()
     return painter
 
 
 def main():
-    parser=argparse.ArgumentParser(description='v7.0 automatic portrait painting; no image-specific guide coordinates')
+    parser=argparse.ArgumentParser(description=f'v{VERSION} automatic portrait painting; no image-specific guide coordinates')
     parser.add_argument('--source',type=Path,required=True)
     parser.add_argument('--work-dir',type=Path,default=ROOT/'generated')
     parser.add_argument('--max-edge',type=int,default=768)
     parser.add_argument('--through',type=int,default=4,choices=range(1,5))
     args=parser.parse_args()
     if not 128<=args.max_edge<=2048:parser.error('--max-edge must be between 128 and 2048')
-    generate(args.source,args.work_dir,args.max_edge,args.through)
+    painter=generate(args.source,args.work_dir,args.max_edge,args.through)
+    if getattr(painter,'construction_blocked',None):
+        print(json.dumps(dict(status='incomplete',blocked=painter.construction_blocked)),flush=True)
+        raise SystemExit(1)
 
 
 if __name__=='__main__':main()

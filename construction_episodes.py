@@ -293,8 +293,62 @@ def _proposal(painter, template, points, radii, target, palette_size):
                 priority=gain/(area**.45)*(1.+min(1., length/240.)*.22))
 
 
+def _coarse_progress(before, after):
+    """Pixel gain alone must not purchase a worse large plane or turn."""
+    keys = ('stationFractionReady', 'longestContinuousFraction', 'contrastCorrespondence')
+    if after['meanProfileMAE'] > before['meanProfileMAE'] + 1.e-7:
+        return 0.
+    if any(after[key] < before[key] - 1.e-7 for key in keys):
+        return 0.
+    return (before['meanProfileMAE'] - after['meanProfileMAE'] +
+            sum(6. * (after[key] - before[key]) for key in keys))
+
+
+def _preview_assessment(painter, proposal, opacity, target_profile, samples, offsets, positions, layer):
+    trial = painter.canvas.copy()
+    (x0, y0, x1, y1), alpha = proposal['footprint']
+    alpha = alpha[:, :, None] * opacity
+    trial[y0:y1, x0:x1] = np.rint(trial[y0:y1, x0:x1] * (1.-alpha) +
+                                 np.asarray(proposal['color']) * alpha).astype(np.uint8)
+    return _assessment(trial, target_profile, samples, offsets, positions, layer)
+
+
+def _repair_templates(canvas, target_profile, samples, offsets, positions, points, radii, current, layer):
+    """Read the unresolved open profile, then choose a broad load or its turn.
+
+    The interval and lanes are brush parameters, never a closed paint region.
+    Re-read after each accepted movement; do not replay the whole episode.
+    """
+    sigma = 16. if layer == 0 else 6.
+    actual = _profile(cv2.GaussianBlur(canvas, (0, 0), sigma), samples)
+    residual = np.abs(actual-target_profile).mean(axis=2)
+    station_error = residual.mean(axis=1)
+    anchor = int(np.argmax(gaussian_filter1d(station_error, 1., mode='nearest')))
+    distance = np.r_[0., np.cumsum(np.linalg.norm(np.diff(points, axis=0), axis=1))]
+    span = max(65., min(distance[-1], float(np.median(radii))*4., distance[-1]*.65))
+    begin = max(0, int(np.searchsorted(distance, positions[anchor]-span*.5))-1)
+    end = min(len(points), max(begin+3, int(np.searchsorted(distance, positions[anchor]+span*.5))+1))
+    chunks = list(dict.fromkeys([(begin, end), (0, len(points))]))
+    plane_missing = (current['stationFractionReady'] < .78 or current['longestContinuousFraction'] < .55 or
+                     current['meanProfileMAE'] > (17. if layer == 0 else 13.5))
+    intent = 'plane' if plane_missing else 'turn'
+    # The worst normal-profile deficit locates the side to load. Width is
+    # broad relative to the existing guide; it never collapses into pixel dabs.
+    across = gaussian_filter1d(residual[max(0, anchor-1):anchor+2].mean(axis=0), 2.)
+    lane = float(np.clip(offsets[int(across.argmax())], -.95, .95))
+    lanes = [(lane, .68), (0., .90), (-.48, .62), (.48, .62)] if plane_missing else [(lane, .40), (-.65, .38), (.65, .38)]
+    templates = [dict(geometry=(offset, width, start, stop), intent=intent, opacity=.97,
+                      fitLoad=False, repairRole='main_plane_width' if plane_missing else 'turn_lane')
+                 for start, stop in chunks for offset, width in lanes]
+    # Also consider a colour-compatible turn, but keep the broad untrimmed
+    # alternatives available when fitting would shrink a main plane away.
+    templates += [dict(geometry=(lane, .55, start, stop), intent=intent, opacity=.97,
+                       fitLoad=True, repairRole='colour_load_width') for start, stop in chunks]
+    return templates
+
+
 def paint_construction_episode(painter, guide_index, layer=1, palette_size=28,
-                               max_strokes=None, max_rounds=None, profile_only=False):
+                               max_strokes=None, max_rounds=None, profile_only=False, feedback=None):
     """Paint one variable-length construction episode; return honest evidence.
 
     Required painter API: src, canvas, guides[(Nx2 points,N radii)],
@@ -338,7 +392,7 @@ def paint_construction_episode(painter, guide_index, layer=1, palette_size=28,
     start_index = len(painter.strokes)
     report = dict(guideIndex=int(guide_index), layer=int(layer), startIndex=start_index,
                   before=before, history=[], accepted=0, attempted=0, rounds=0,
-                  intentCounts={}, acceptedLengths=[], acceptedWidths=[],
+                  intentCounts={}, acceptedLengths=[], acceptedWidths=[], rejectedCoarse=0,
                   movementFit=movement_fit,
                   actualEvalSigma=sigma,
                   geometry='open longitudinal sweeps; whole physical brush footprints',
@@ -355,6 +409,55 @@ def paint_construction_episode(painter, guide_index, layer=1, palette_size=28,
     painter._construction_episode_count = episode_number+1
     group = f'construction-{layer}-{episode_number}'
     current = before
+    if feedback is not None:
+        if feedback['guideIndex'] != guide_index or feedback['layer'] != layer or not feedback['needsRevisit']:
+            raise ValueError('Repair feedback must describe this unfinished open movement')
+        report['feedbackConsumed'] = dict(status=feedback['status'], after=feedback['after'])
+        report['repairActions'] = []
+        # Same five-mark continuation ceiling as v7.0, with a finite candidate
+        # search and an explicit stall. No additional rounds or detail pass.
+        for _ in range(min(max_strokes, 5)):
+            candidates = []
+            for template in _repair_templates(painter.canvas, target_profile, samples, offsets, positions,
+                                               points, radii, current, layer):
+                report['attempted'] += 1
+                proposal = _proposal(painter, template, points, radii, target, palette_size)
+                if proposal is None:
+                    continue
+                assessment = _preview_assessment(painter, proposal, template['opacity'], target_profile,
+                                                 samples, offsets, positions, layer)
+                progress = _coarse_progress(current, assessment)
+                if progress < .08:
+                    report['rejectedCoarse'] += 1
+                    continue
+                candidates.append((progress, proposal, template, assessment))
+            if not candidates:
+                status = 'no_improvement'
+                report['stopReason'] = 'no_safe_coarse_progress_on_current_open_axis'
+                break
+            _, proposal, template, assessment = max(candidates, key=lambda item: item[0])
+            if not painter.put(proposal['points'], proposal['radii'], proposal['color'], proposal['sourceSample'],
+                               layer, template['intent'], template['opacity'], group, proposal['footprint']):
+                status = 'no_improvement'
+                report['stopReason'] = 'brush_not_paintable'
+                break
+            current = assessment
+            report['accepted'] += 1
+            intents[template['intent']] += 1
+            report['acceptedLengths'].append(proposal['length'])
+            report['acceptedWidths'].append(float(2*proposal['radii'].max()))
+            report['repairActions'].append(dict(role=template['repairRole'], geometry=list(template['geometry'])))
+            report['history'].append(dict(afterAccepted=report['accepted'], intent=template['intent'], **current))
+            if current['readableProxy']:
+                status = 'readable_proxy'
+                report['stopReason'] = 'coarse_profile_ready'
+                break
+        else:
+            status = 'budget_unfinished'
+            report['stopReason'] = 'bounded_repair_budget'
+        report.update(status=status, needsRevisit=status != 'readable_proxy', after=current,
+                      endIndex=len(painter.strokes), intentCounts=dict(intents))
+        return report
     for round_index in range(max_rounds):
         report['rounds'] += 1
         scale = 1. if round_index == 0 else .78 if round_index == 1 else .58
@@ -391,6 +494,11 @@ def paint_construction_episode(painter, guide_index, layer=1, palette_size=28,
                     break
                 _, _, index, proposal = max(candidates, key=lambda value: (value[0], value[1]))
                 template = templates.pop(index)
+                assessed = _preview_assessment(painter, proposal, template['opacity'], target_profile,
+                                               samples, offsets, positions, layer)
+                if _coarse_progress(current, assessed) < .02:
+                    report['rejectedCoarse'] += 1
+                    continue
                 accepted = painter.put(proposal['points'], proposal['radii'], proposal['color'],
                                        proposal['sourceSample'], layer, template['intent'],
                                        template['opacity'], group, proposal['footprint'])
@@ -401,7 +509,7 @@ def paint_construction_episode(painter, guide_index, layer=1, palette_size=28,
                 intents[template['intent']] += 1
                 report['acceptedLengths'].append(proposal['length'])
                 report['acceptedWidths'].append(float(2*proposal['radii'].max()))
-                current = _assessment(painter.canvas, target_profile, samples, offsets, positions, layer)
+                current = assessed
                 report['history'].append(dict(afterAccepted=report['accepted'], intent=template['intent'], **current))
                 turn_required = current['meaningfulContrastStations'] >= max(3, len(positions)*.25)
                 if current['readableProxy'] and (not turn_required or intents['turn'] >= 1):

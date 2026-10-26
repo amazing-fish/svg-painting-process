@@ -1,0 +1,1089 @@
+{
+  "parameters": {
+    "maxEdge": 640,
+    "through": 2
+  },
+  "cases": [
+    {
+      "relativePath": "{59D030C1-B3CB-8264-9BE6-97CA25B599E7}.jpg",
+      "sha256": "7e7d0740ae122ebd5ca703c839882f68185c8515e98de4030b49ee457e849032",
+      "runs": {
+        "before": {
+          "status": "generated",
+          "seconds": 16.804,
+          "frames": [
+            {
+              "label": "第 100 笔完成",
+              "strokeCount": 100,
+              "timeMs": 50315,
+              "status": "exported",
+              "href": "sample-001/before/stroke-100.svg"
+            },
+            {
+              "label": "第 140 笔完成",
+              "strokeCount": 140,
+              "timeMs": 76790,
+              "status": "exported",
+              "href": "sample-001/before/stroke-140.svg"
+            },
+            {
+              "label": "第 185 笔完成",
+              "strokeCount": 185,
+              "timeMs": 96580,
+              "status": "exported",
+              "href": "sample-001/before/stroke-185.svg"
+            },
+            {
+              "label": "第 210 笔完成",
+              "strokeCount": 210,
+              "timeMs": 105984,
+              "status": "exported",
+              "href": "sample-001/before/stroke-210.svg"
+            },
+            {
+              "label": "首次未完成转移前",
+              "strokeCount": 123,
+              "timeMs": 64805,
+              "status": "exported",
+              "href": "sample-001/before/transition-before.svg"
+            },
+            {
+              "label": "首次未完成转移后",
+              "strokeCount": 124,
+              "timeMs": 65082,
+              "status": "exported",
+              "href": "sample-001/before/transition-after.svg"
+            }
+          ],
+          "version": "7.0",
+          "strokeCount": 676,
+          "incomplete": false,
+          "blocked": null,
+          "stages": 2,
+          "completedStages": 2,
+          "unresolvedTransition": {
+            "reportIndex": 7,
+            "guideIndex": 5,
+            "layer": 0,
+            "status": "budget_unfinished",
+            "strokeCount": 123,
+            "timeMs": 64890,
+            "kind": "transfer",
+            "hasNextTransfer": true
+          },
+          "blockedEnd": null
+        },
+        "after": {
+          "status": "incomplete",
+          "seconds": 10.281,
+          "frames": [
+            {
+              "label": "第 100 笔完成",
+              "strokeCount": 100,
+              "timeMs": 50315,
+              "status": "exported",
+              "href": "sample-001/after/stroke-100.svg"
+            },
+            {
+              "label": "第 140 笔完成",
+              "strokeCount": 140,
+              "timeMs": 70605,
+              "status": "exported",
+              "href": "sample-001/after/stroke-140.svg"
+            },
+            {
+              "label": "第 185 笔完成",
+              "strokeCount": 185,
+              "timeMs": 87297,
+              "status": "exported",
+              "href": "sample-001/after/stroke-185.svg"
+            },
+            {
+              "label": "第 210 笔完成",
+              "strokeCount": 210,
+              "timeMs": null,
+              "status": "unavailable: fewer strokes"
+            },
+            {
+              "label": "首次未完成转移前",
+              "strokeCount": 118,
+              "timeMs": 58624,
+              "status": "exported",
+              "href": "sample-001/after/transition-before.svg"
+            },
+            {
+              "label": "首次未完成转移后",
+              "strokeCount": 119,
+              "timeMs": 58903,
+              "status": "exported",
+              "href": "sample-001/after/transition-after.svg"
+            },
+            {
+              "label": "预算停止末帧（无后续转移）",
+              "strokeCount": 198,
+              "timeMs": 91209,
+              "status": "exported",
+              "href": "sample-001/after/blocked-final.svg"
+            }
+          ],
+          "version": "7.1",
+          "strokeCount": 198,
+          "incomplete": true,
+          "blocked": {
+            "layer": 0,
+            "guideIndex": 31,
+            "reportIndex": 47,
+            "reason": "repair_budget_exhausted_before_coarse_ready"
+          },
+          "stages": 1,
+          "completedStages": 0,
+          "unresolvedTransition": {
+            "reportIndex": 8,
+            "guideIndex": 5,
+            "layer": 0,
+            "status": "no_improvement",
+            "strokeCount": 118,
+            "timeMs": 58709,
+            "kind": "transfer",
+            "hasNextTransfer": true
+          },
+          "blockedEnd": {
+            "reportIndex": 47,
+            "guideIndex": 31,
+            "layer": 0,
+            "status": "budget_unfinished",
+            "strokeCount": 198,
+            "timeMs": 91209,
+            "kind": "blocked_end",
+            "hasNextTransfer": false,
+            "reason": {
+              "layer": 0,
+              "guideIndex": 31,
+              "reportIndex": 47,
+              "reason": "repair_budget_exhausted_before_coarse_ready"
+            }
+          }
+        }
+      },
+      "clips": [
+        {
+          "label": "原版第 100 笔附近 · 同原始时间",
+          "anchorMs": 50315,
+          "status": "available",
+          "startMs": 47315,
+          "endMs": 53315,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "原版第 140 笔附近 · 同原始时间",
+          "anchorMs": 76790,
+          "status": "available",
+          "startMs": 73790,
+          "endMs": 79790,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "原版第 185 笔附近 · 同原始时间",
+          "anchorMs": 96580,
+          "status": "unavailable",
+          "reason": "两版共同原始时间不足，无法提供完整定位片段及后置3秒"
+        },
+        {
+          "label": "原版第 210 笔附近 · 同原始时间",
+          "anchorMs": 105984,
+          "status": "unavailable",
+          "reason": "两版共同原始时间不足，无法提供完整定位片段及后置3秒"
+        },
+        {
+          "label": "原版首次未完成转移 · 同原始时间",
+          "anchorMs": 64890,
+          "status": "available",
+          "startMs": 61890,
+          "endMs": 67890,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "修改版首次未完成转移 · 同原始时间",
+          "anchorMs": 58709,
+          "status": "available",
+          "startMs": 55709,
+          "endMs": 61709,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "修改版预算停止前（无下一转移） · 同原始时间",
+          "anchorMs": 91209,
+          "status": "available",
+          "startMs": 88209,
+          "endMs": 91209,
+          "trailingContextTruncated": true,
+          "terminal": true
+        }
+      ]
+    },
+    {
+      "relativePath": "00013-193326953.png",
+      "sha256": "041739b0242a4140c05e32d5d8cf9dcc283560b2b2cc82dd96a1651130232cde",
+      "runs": {
+        "before": {
+          "status": "generated",
+          "seconds": 11.153,
+          "frames": [
+            {
+              "label": "第 100 笔完成",
+              "strokeCount": 100,
+              "timeMs": 51091,
+              "status": "exported",
+              "href": "sample-002/before/stroke-100.svg"
+            },
+            {
+              "label": "第 140 笔完成",
+              "strokeCount": 140,
+              "timeMs": 81336,
+              "status": "exported",
+              "href": "sample-002/before/stroke-140.svg"
+            },
+            {
+              "label": "第 185 笔完成",
+              "strokeCount": 185,
+              "timeMs": 103312,
+              "status": "exported",
+              "href": "sample-002/before/stroke-185.svg"
+            },
+            {
+              "label": "第 210 笔完成",
+              "strokeCount": 210,
+              "timeMs": 113489,
+              "status": "exported",
+              "href": "sample-002/before/stroke-210.svg"
+            },
+            {
+              "label": "首次未完成转移前",
+              "strokeCount": 80,
+              "timeMs": 42889,
+              "status": "exported",
+              "href": "sample-002/before/transition-before.svg"
+            },
+            {
+              "label": "首次未完成转移后",
+              "strokeCount": 81,
+              "timeMs": 44132,
+              "status": "exported",
+              "href": "sample-002/before/transition-after.svg"
+            }
+          ],
+          "version": "7.0",
+          "strokeCount": 324,
+          "incomplete": false,
+          "blocked": null,
+          "stages": 2,
+          "completedStages": 2,
+          "unresolvedTransition": {
+            "reportIndex": 1,
+            "guideIndex": 0,
+            "layer": 0,
+            "status": "budget_unfinished",
+            "strokeCount": 80,
+            "timeMs": 42974,
+            "kind": "transfer",
+            "hasNextTransfer": true
+          },
+          "blockedEnd": null
+        },
+        "after": {
+          "status": "incomplete",
+          "seconds": 3.915,
+          "frames": [
+            {
+              "label": "第 100 笔完成",
+              "strokeCount": 100,
+              "timeMs": null,
+              "status": "unavailable: fewer strokes"
+            },
+            {
+              "label": "第 140 笔完成",
+              "strokeCount": 140,
+              "timeMs": null,
+              "status": "unavailable: fewer strokes"
+            },
+            {
+              "label": "第 185 笔完成",
+              "strokeCount": 185,
+              "timeMs": null,
+              "status": "unavailable: fewer strokes"
+            },
+            {
+              "label": "第 210 笔完成",
+              "strokeCount": 210,
+              "timeMs": null,
+              "status": "unavailable: fewer strokes"
+            },
+            {
+              "label": "首次未完成转移前",
+              "strokeCount": 77,
+              "timeMs": 40492,
+              "status": "exported",
+              "href": "sample-002/after/transition-before.svg"
+            },
+            {
+              "label": "首次未完成转移后",
+              "strokeCount": 78,
+              "timeMs": 41735,
+              "status": "exported",
+              "href": "sample-002/after/transition-after.svg"
+            },
+            {
+              "label": "预算停止末帧（无后续转移）",
+              "strokeCount": 92,
+              "timeMs": 47332,
+              "status": "exported",
+              "href": "sample-002/after/blocked-final.svg"
+            }
+          ],
+          "version": "7.1",
+          "strokeCount": 92,
+          "incomplete": true,
+          "blocked": {
+            "layer": 0,
+            "guideIndex": 7,
+            "reportIndex": 10,
+            "reason": "repair_budget_exhausted_before_coarse_ready"
+          },
+          "stages": 1,
+          "completedStages": 0,
+          "unresolvedTransition": {
+            "reportIndex": 1,
+            "guideIndex": 0,
+            "layer": 0,
+            "status": "no_improvement",
+            "strokeCount": 77,
+            "timeMs": 40577,
+            "kind": "transfer",
+            "hasNextTransfer": true
+          },
+          "blockedEnd": {
+            "reportIndex": 10,
+            "guideIndex": 7,
+            "layer": 0,
+            "status": "budget_unfinished",
+            "strokeCount": 92,
+            "timeMs": 47332,
+            "kind": "blocked_end",
+            "hasNextTransfer": false,
+            "reason": {
+              "layer": 0,
+              "guideIndex": 7,
+              "reportIndex": 10,
+              "reason": "repair_budget_exhausted_before_coarse_ready"
+            }
+          }
+        }
+      },
+      "clips": [
+        {
+          "label": "原版第 100 笔附近 · 同原始时间",
+          "anchorMs": 51091,
+          "status": "unavailable",
+          "reason": "两版共同原始时间不足，无法提供完整定位片段及后置3秒"
+        },
+        {
+          "label": "原版第 140 笔附近 · 同原始时间",
+          "anchorMs": 81336,
+          "status": "unavailable",
+          "reason": "两版共同原始时间不足，无法提供完整定位片段及后置3秒"
+        },
+        {
+          "label": "原版第 185 笔附近 · 同原始时间",
+          "anchorMs": 103312,
+          "status": "unavailable",
+          "reason": "两版共同原始时间不足，无法提供完整定位片段及后置3秒"
+        },
+        {
+          "label": "原版第 210 笔附近 · 同原始时间",
+          "anchorMs": 113489,
+          "status": "unavailable",
+          "reason": "两版共同原始时间不足，无法提供完整定位片段及后置3秒"
+        },
+        {
+          "label": "原版首次未完成转移 · 同原始时间",
+          "anchorMs": 42974,
+          "status": "available",
+          "startMs": 39974,
+          "endMs": 45974,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "修改版首次未完成转移 · 同原始时间",
+          "anchorMs": 40577,
+          "status": "available",
+          "startMs": 37577,
+          "endMs": 43577,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "修改版预算停止前（无下一转移） · 同原始时间",
+          "anchorMs": 47332,
+          "status": "available",
+          "startMs": 44332,
+          "endMs": 47332,
+          "trailingContextTruncated": true,
+          "terminal": true
+        }
+      ]
+    },
+    {
+      "relativePath": "2f22ad27-e747-4500-b975-345352f21ba7.png",
+      "sha256": "bbeb4acc9f17aed429d0264e28d82e4b9d9e79beeb73b0693d1391b404381f93",
+      "runs": {
+        "before": {
+          "status": "generated",
+          "seconds": 15.12,
+          "frames": [
+            {
+              "label": "第 100 笔完成",
+              "strokeCount": 100,
+              "timeMs": 50448,
+              "status": "exported",
+              "href": "sample-003/before/stroke-100.svg"
+            },
+            {
+              "label": "第 140 笔完成",
+              "strokeCount": 140,
+              "timeMs": 66477,
+              "status": "exported",
+              "href": "sample-003/before/stroke-140.svg"
+            },
+            {
+              "label": "第 185 笔完成",
+              "strokeCount": 185,
+              "timeMs": 84710,
+              "status": "exported",
+              "href": "sample-003/before/stroke-185.svg"
+            },
+            {
+              "label": "第 210 笔完成",
+              "strokeCount": 210,
+              "timeMs": 94361,
+              "status": "exported",
+              "href": "sample-003/before/stroke-210.svg"
+            },
+            {
+              "label": "首次未完成转移前",
+              "strokeCount": 96,
+              "timeMs": 48342,
+              "status": "exported",
+              "href": "sample-003/before/transition-before.svg"
+            },
+            {
+              "label": "首次未完成转移后",
+              "strokeCount": 97,
+              "timeMs": 48985,
+              "status": "exported",
+              "href": "sample-003/before/transition-after.svg"
+            }
+          ],
+          "version": "7.0",
+          "strokeCount": 658,
+          "incomplete": false,
+          "blocked": null,
+          "stages": 2,
+          "completedStages": 2,
+          "unresolvedTransition": {
+            "reportIndex": 5,
+            "guideIndex": 3,
+            "layer": 0,
+            "status": "budget_unfinished",
+            "strokeCount": 96,
+            "timeMs": 48427,
+            "kind": "transfer",
+            "hasNextTransfer": true
+          },
+          "blockedEnd": null
+        },
+        "after": {
+          "status": "generated",
+          "seconds": 35.228,
+          "frames": [
+            {
+              "label": "第 100 笔完成",
+              "strokeCount": 100,
+              "timeMs": 50521,
+              "status": "exported",
+              "href": "sample-003/after/stroke-100.svg"
+            },
+            {
+              "label": "第 140 笔完成",
+              "strokeCount": 140,
+              "timeMs": 65825,
+              "status": "exported",
+              "href": "sample-003/after/stroke-140.svg"
+            },
+            {
+              "label": "第 185 笔完成",
+              "strokeCount": 185,
+              "timeMs": 84222,
+              "status": "exported",
+              "href": "sample-003/after/stroke-185.svg"
+            },
+            {
+              "label": "第 210 笔完成",
+              "strokeCount": 210,
+              "timeMs": 95883,
+              "status": "exported",
+              "href": "sample-003/after/stroke-210.svg"
+            },
+            {
+              "label": "首次未完成转移前",
+              "strokeCount": 85,
+              "timeMs": 43513,
+              "status": "exported",
+              "href": "sample-003/after/transition-before.svg"
+            },
+            {
+              "label": "首次未完成转移后",
+              "strokeCount": 86,
+              "timeMs": 44156,
+              "status": "exported",
+              "href": "sample-003/after/transition-after.svg"
+            }
+          ],
+          "version": "7.1",
+          "strokeCount": 568,
+          "incomplete": false,
+          "blocked": null,
+          "stages": 2,
+          "completedStages": 2,
+          "unresolvedTransition": {
+            "reportIndex": 4,
+            "guideIndex": 3,
+            "layer": 0,
+            "status": "no_improvement",
+            "strokeCount": 85,
+            "timeMs": 43598,
+            "kind": "transfer",
+            "hasNextTransfer": true
+          },
+          "blockedEnd": null
+        }
+      },
+      "clips": [
+        {
+          "label": "原版第 100 笔附近 · 同原始时间",
+          "anchorMs": 50448,
+          "status": "available",
+          "startMs": 47448,
+          "endMs": 53448,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "原版第 140 笔附近 · 同原始时间",
+          "anchorMs": 66477,
+          "status": "available",
+          "startMs": 63477,
+          "endMs": 69477,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "原版第 185 笔附近 · 同原始时间",
+          "anchorMs": 84710,
+          "status": "available",
+          "startMs": 81710,
+          "endMs": 87710,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "原版第 210 笔附近 · 同原始时间",
+          "anchorMs": 94361,
+          "status": "available",
+          "startMs": 91361,
+          "endMs": 97361,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "原版首次未完成转移 · 同原始时间",
+          "anchorMs": 48427,
+          "status": "available",
+          "startMs": 45427,
+          "endMs": 51427,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "修改版首次未完成转移 · 同原始时间",
+          "anchorMs": 43598,
+          "status": "available",
+          "startMs": 40598,
+          "endMs": 46598,
+          "trailingContextTruncated": false,
+          "terminal": false
+        }
+      ]
+    },
+    {
+      "relativePath": "521dfb1b-1c2e-4898-9366-1a5776921196.png",
+      "sha256": "96d0fe7c9ed0d13d943ed205a81db91b2fc31860a0418cb092e49475275ebec6",
+      "runs": {
+        "before": {
+          "status": "generated",
+          "seconds": 25.291,
+          "frames": [
+            {
+              "label": "第 100 笔完成",
+              "strokeCount": 100,
+              "timeMs": 50315,
+              "status": "exported",
+              "href": "sample-004/before/stroke-100.svg"
+            },
+            {
+              "label": "第 140 笔完成",
+              "strokeCount": 140,
+              "timeMs": 70148,
+              "status": "exported",
+              "href": "sample-004/before/stroke-140.svg"
+            },
+            {
+              "label": "第 185 笔完成",
+              "strokeCount": 185,
+              "timeMs": 88101,
+              "status": "exported",
+              "href": "sample-004/before/stroke-185.svg"
+            },
+            {
+              "label": "第 210 笔完成",
+              "strokeCount": 210,
+              "timeMs": 100824,
+              "status": "exported",
+              "href": "sample-004/before/stroke-210.svg"
+            },
+            {
+              "label": "首次未完成转移前",
+              "strokeCount": 134,
+              "timeMs": 66942,
+              "status": "exported",
+              "href": "sample-004/before/transition-before.svg"
+            },
+            {
+              "label": "首次未完成转移后",
+              "strokeCount": 135,
+              "timeMs": 67849,
+              "status": "exported",
+              "href": "sample-004/before/transition-after.svg"
+            }
+          ],
+          "version": "7.0",
+          "strokeCount": 1227,
+          "incomplete": false,
+          "blocked": null,
+          "stages": 2,
+          "completedStages": 2,
+          "unresolvedTransition": {
+            "reportIndex": 1,
+            "guideIndex": 0,
+            "layer": 0,
+            "status": "budget_unfinished",
+            "strokeCount": 134,
+            "timeMs": 67027,
+            "kind": "transfer",
+            "hasNextTransfer": true
+          },
+          "blockedEnd": null
+        },
+        "after": {
+          "status": "incomplete",
+          "seconds": 41.016,
+          "frames": [
+            {
+              "label": "第 100 笔完成",
+              "strokeCount": 100,
+              "timeMs": 50315,
+              "status": "exported",
+              "href": "sample-004/after/stroke-100.svg"
+            },
+            {
+              "label": "第 140 笔完成",
+              "strokeCount": 140,
+              "timeMs": 69030,
+              "status": "exported",
+              "href": "sample-004/after/stroke-140.svg"
+            },
+            {
+              "label": "第 185 笔完成",
+              "strokeCount": 185,
+              "timeMs": 87970,
+              "status": "exported",
+              "href": "sample-004/after/stroke-185.svg"
+            },
+            {
+              "label": "第 210 笔完成",
+              "strokeCount": 210,
+              "timeMs": 100996,
+              "status": "exported",
+              "href": "sample-004/after/stroke-210.svg"
+            },
+            {
+              "label": "首次未完成转移前",
+              "strokeCount": 130,
+              "timeMs": 64835,
+              "status": "exported",
+              "href": "sample-004/after/transition-before.svg"
+            },
+            {
+              "label": "首次未完成转移后",
+              "strokeCount": 131,
+              "timeMs": 65287,
+              "status": "exported",
+              "href": "sample-004/after/transition-after.svg"
+            },
+            {
+              "label": "预算停止末帧（无后续转移）",
+              "strokeCount": 269,
+              "timeMs": 124287,
+              "status": "exported",
+              "href": "sample-004/after/blocked-final.svg"
+            }
+          ],
+          "version": "7.1",
+          "strokeCount": 269,
+          "incomplete": true,
+          "blocked": {
+            "layer": 0,
+            "guideIndex": 30,
+            "reportIndex": 49,
+            "reason": "repair_budget_exhausted_before_coarse_ready"
+          },
+          "stages": 1,
+          "completedStages": 0,
+          "unresolvedTransition": {
+            "reportIndex": 1,
+            "guideIndex": 0,
+            "layer": 0,
+            "status": "no_improvement",
+            "strokeCount": 130,
+            "timeMs": 64920,
+            "kind": "transfer",
+            "hasNextTransfer": true
+          },
+          "blockedEnd": {
+            "reportIndex": 49,
+            "guideIndex": 30,
+            "layer": 0,
+            "status": "budget_unfinished",
+            "strokeCount": 269,
+            "timeMs": 124287,
+            "kind": "blocked_end",
+            "hasNextTransfer": false,
+            "reason": {
+              "layer": 0,
+              "guideIndex": 30,
+              "reportIndex": 49,
+              "reason": "repair_budget_exhausted_before_coarse_ready"
+            }
+          }
+        }
+      },
+      "clips": [
+        {
+          "label": "原版第 100 笔附近 · 同原始时间",
+          "anchorMs": 50315,
+          "status": "available",
+          "startMs": 47315,
+          "endMs": 53315,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "原版第 140 笔附近 · 同原始时间",
+          "anchorMs": 70148,
+          "status": "available",
+          "startMs": 67148,
+          "endMs": 73148,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "原版第 185 笔附近 · 同原始时间",
+          "anchorMs": 88101,
+          "status": "available",
+          "startMs": 85101,
+          "endMs": 91101,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "原版第 210 笔附近 · 同原始时间",
+          "anchorMs": 100824,
+          "status": "available",
+          "startMs": 97824,
+          "endMs": 103824,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "原版首次未完成转移 · 同原始时间",
+          "anchorMs": 67027,
+          "status": "available",
+          "startMs": 64027,
+          "endMs": 70027,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "修改版首次未完成转移 · 同原始时间",
+          "anchorMs": 64920,
+          "status": "available",
+          "startMs": 61920,
+          "endMs": 67920,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "修改版预算停止前（无下一转移） · 同原始时间",
+          "anchorMs": 124287,
+          "status": "available",
+          "startMs": 121287,
+          "endMs": 124287,
+          "trailingContextTruncated": true,
+          "terminal": true
+        }
+      ]
+    },
+    {
+      "relativePath": "native-image.webp",
+      "sha256": "16f246666782463540e2c11769fb8eeb0e32b5d8223d0244db119b5be19c0209",
+      "runs": {
+        "before": {
+          "status": "generated",
+          "seconds": 14.675,
+          "frames": [
+            {
+              "label": "第 100 笔完成",
+              "strokeCount": 100,
+              "timeMs": 50315,
+              "status": "exported",
+              "href": "sample-005/before/stroke-100.svg"
+            },
+            {
+              "label": "第 140 笔完成",
+              "strokeCount": 140,
+              "timeMs": 73191,
+              "status": "exported",
+              "href": "sample-005/before/stroke-140.svg"
+            },
+            {
+              "label": "第 185 笔完成",
+              "strokeCount": 185,
+              "timeMs": 93147,
+              "status": "exported",
+              "href": "sample-005/before/stroke-185.svg"
+            },
+            {
+              "label": "第 210 笔完成",
+              "strokeCount": 210,
+              "timeMs": 102929,
+              "status": "exported",
+              "href": "sample-005/before/stroke-210.svg"
+            },
+            {
+              "label": "首次未完成转移前",
+              "strokeCount": 115,
+              "timeMs": 57809,
+              "status": "exported",
+              "href": "sample-005/before/transition-before.svg"
+            },
+            {
+              "label": "首次未完成转移后",
+              "strokeCount": 116,
+              "timeMs": 58105,
+              "status": "exported",
+              "href": "sample-005/before/transition-after.svg"
+            }
+          ],
+          "version": "7.0",
+          "strokeCount": 896,
+          "incomplete": false,
+          "blocked": null,
+          "stages": 2,
+          "completedStages": 2,
+          "unresolvedTransition": {
+            "reportIndex": 6,
+            "guideIndex": 5,
+            "layer": 0,
+            "status": "budget_unfinished",
+            "strokeCount": 115,
+            "timeMs": 57894,
+            "kind": "transfer",
+            "hasNextTransfer": true
+          },
+          "blockedEnd": null
+        },
+        "after": {
+          "status": "incomplete",
+          "seconds": 35.61,
+          "frames": [
+            {
+              "label": "第 100 笔完成",
+              "strokeCount": 100,
+              "timeMs": 50315,
+              "status": "exported",
+              "href": "sample-005/after/stroke-100.svg"
+            },
+            {
+              "label": "第 140 笔完成",
+              "strokeCount": 140,
+              "timeMs": 71023,
+              "status": "exported",
+              "href": "sample-005/after/stroke-140.svg"
+            },
+            {
+              "label": "第 185 笔完成",
+              "strokeCount": 185,
+              "timeMs": 90534,
+              "status": "exported",
+              "href": "sample-005/after/stroke-185.svg"
+            },
+            {
+              "label": "第 210 笔完成",
+              "strokeCount": 210,
+              "timeMs": 99057,
+              "status": "exported",
+              "href": "sample-005/after/stroke-210.svg"
+            },
+            {
+              "label": "首次未完成转移前",
+              "strokeCount": 116,
+              "timeMs": 57958,
+              "status": "exported",
+              "href": "sample-005/after/transition-before.svg"
+            },
+            {
+              "label": "首次未完成转移后",
+              "strokeCount": 117,
+              "timeMs": 58254,
+              "status": "exported",
+              "href": "sample-005/after/transition-after.svg"
+            },
+            {
+              "label": "预算停止末帧（无后续转移）",
+              "strokeCount": 352,
+              "timeMs": 161823,
+              "status": "exported",
+              "href": "sample-005/after/blocked-final.svg"
+            }
+          ],
+          "version": "7.1",
+          "strokeCount": 352,
+          "incomplete": true,
+          "blocked": {
+            "layer": 1,
+            "guideIndex": 25,
+            "reportIndex": 101,
+            "reason": "repair_budget_exhausted_before_coarse_ready"
+          },
+          "stages": 2,
+          "completedStages": 1,
+          "unresolvedTransition": {
+            "reportIndex": 7,
+            "guideIndex": 5,
+            "layer": 0,
+            "status": "no_improvement",
+            "strokeCount": 116,
+            "timeMs": 58043,
+            "kind": "transfer",
+            "hasNextTransfer": true
+          },
+          "blockedEnd": {
+            "reportIndex": 101,
+            "guideIndex": 25,
+            "layer": 1,
+            "status": "budget_unfinished",
+            "strokeCount": 352,
+            "timeMs": 161823,
+            "kind": "blocked_end",
+            "hasNextTransfer": false,
+            "reason": {
+              "layer": 1,
+              "guideIndex": 25,
+              "reportIndex": 101,
+              "reason": "repair_budget_exhausted_before_coarse_ready"
+            }
+          }
+        }
+      },
+      "clips": [
+        {
+          "label": "原版第 100 笔附近 · 同原始时间",
+          "anchorMs": 50315,
+          "status": "available",
+          "startMs": 47315,
+          "endMs": 53315,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "原版第 140 笔附近 · 同原始时间",
+          "anchorMs": 73191,
+          "status": "available",
+          "startMs": 70191,
+          "endMs": 76191,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "原版第 185 笔附近 · 同原始时间",
+          "anchorMs": 93147,
+          "status": "available",
+          "startMs": 90147,
+          "endMs": 96147,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "原版第 210 笔附近 · 同原始时间",
+          "anchorMs": 102929,
+          "status": "available",
+          "startMs": 99929,
+          "endMs": 105929,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "原版首次未完成转移 · 同原始时间",
+          "anchorMs": 57894,
+          "status": "available",
+          "startMs": 54894,
+          "endMs": 60894,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "修改版首次未完成转移 · 同原始时间",
+          "anchorMs": 58043,
+          "status": "available",
+          "startMs": 55043,
+          "endMs": 61043,
+          "trailingContextTruncated": false,
+          "terminal": false
+        },
+        {
+          "label": "修改版预算停止前（无下一转移） · 同原始时间",
+          "anchorMs": 161823,
+          "status": "available",
+          "startMs": 158823,
+          "endMs": 161823,
+          "trailingContextTruncated": true,
+          "terminal": true
+        }
+      ]
+    }
+  ]
+}

@@ -23,3 +23,4 @@ jobs:
       - run: python -m pip install -r requirements.txt
       - run: python -m unittest discover -s tests -v
       - run: node test_player_v7.js
+      - run: python tools/verify_artifact_manifest.py artifacts/v7.2/artifact-manifest.json

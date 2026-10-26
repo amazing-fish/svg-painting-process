@@ -15,6 +15,15 @@ from export_svg import export_svg
 
 
 class PipelineTest(unittest.TestCase):
+    def test_repackaging_cannot_mislabel_historical_generator(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            data = root / 'old-data.json'
+            data.write_text(json.dumps({'version': '7.0'}), encoding='utf-8')
+            with self.assertRaisesRegex(ValueError, 'does not match generator'):
+                render_player(data, root / 'old-painting.html')
+            self.assertFalse((root / 'old-painting.html').exists())
+
     def test_shared_canvas_to_offline_artifacts(self):
         with tempfile.TemporaryDirectory() as folder:
             work = Path(folder)
@@ -43,7 +52,7 @@ class PipelineTest(unittest.TestCase):
             target = work / "painting-v7.0.svg"
             export_svg(data, target)
             self.assertTrue(target.is_file())
-            self.assertNotIn("<image", target.read_text())
+            self.assertNotIn("<image", target.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":
