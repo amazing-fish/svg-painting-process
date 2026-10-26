@@ -1,6 +1,8 @@
 # 人物生成当前范围
 
-当前主线为 [Issue #3](https://github.com/amazing-fish/svg-painting-process/issues/3)，[PR #4](https://github.com/amazing-fish/svg-painting-process/pull/4) 保持开放。
+当前主线为 [Issue #3](https://github.com/amazing-fish/svg-painting-process/issues/3)。[PR #4](https://github.com/amazing-fish/svg-painting-process/pull/4) 已于2026-10-27合并；后续分支为 `fix/portrait-v8-head-coarse`。
+
+后续[开放主面实验](portrait-coarse-experiment.md)已把后上发的阻塞定位到初始笔载色。条件策略及最终源支持重测保留前32笔，后上发通过原数值阈值，最新64笔在最后尾部走势停止。先交付可复现的显式实验入口与验证，再继续尾部主面和多图形体；不把局部ready当成人物效果完成。
 
 以v6原参考图/20条指定开放走势为效果基线；先看同原图、同原生尺寸、同原始时间的实际过程。v7.2删除了粗方块网格前奏，但自动提轴仍缺关键腿部走势，尚未达到v6。现有局部分支试验未达标，不进入产品。
 
