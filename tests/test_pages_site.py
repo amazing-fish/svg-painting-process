@@ -52,7 +52,7 @@ class PagesSiteTest(unittest.TestCase):
                                      for name in ('index.html', 'player.html', 'artifact-manifest.json')}
         self.assertEqual(actual, expected)
         self.assertEqual(result['files'], 7)
-        self.publication_validation.assert_called_once_with(self.repo / 'artifacts/v8.1')
+        self.publication_validation.assert_called_once_with(self.repo.resolve() / 'artifacts/v8.1')
         root = (self.output / 'index.html').read_text(encoding='utf-8')
         self.assertIn('href="artifacts/v8.1/index.html"', root)
         self.assertIn('href="artifacts/v7.2/index.html"', root)
