@@ -1,5 +1,17 @@
 # 交付状态 · v7.2
 
+## 2026-10-27 后续进展
+
+PR #4 已由 amazing-fish 于2026-10-27 00:47:54（Asia/Shanghai）合并，合并提交为 `de5a4584dbd003b006fb46ef8377be3bc46f92db`。本轮00:56远端查询确认既有Windows/Ubuntu检查成功，Issue #3仍开放。后续工作位于 `fix/portrait-v8-head-coarse`，从该合并提交开始，未修改默认自动提轴入口。
+
+本地41笔两头部失败现已复现并定位：后上发第一笔跳过载色拟合，虽然总能量下降，却覆盖了源图的亮区/空隙。统一强制拟合的36笔试验失败，不采用。只为不安全初始笔尝试同模板已有拟合后，前32笔保持逐值相同，后上发通过原就绪阈值；加入最终笔带源支持重测后的正式实验入口实跑64笔，在最后尾部轴预算耗尽后严格停止，未进入明暗。修复前65笔仅为历史中间结果。人物形体与绘画自然度仍未通过。详见 [开放主面实验](portrait-coarse-experiment.md)。
+
+本轮本地检查：18项新增合成回归通过，含最终源支持漏洞的先红后绿验证；完整工作区72项Python测试通过（其中15项是未提交的pose后端测试，本PR范围合计57项）；播放器14,796项逻辑检查、Python语法和v7.2既有86文件清单校验通过。原图最终实跑124.276秒；这些本地结果不代表新PR远端CI已通过。
+
+下文保留v7.2原交付轮的历史证据；其中“PR保持开放”仅描述当时状态。
+
+---
+
 2026-10-26，Asia/Shanghai。当前分支 `fix/portrait-v7-revisit-baseline`，继续更新 [PR #4](https://github.com/amazing-fish/svg-painting-process/pull/4)，未授权合并。Issue [#3](https://github.com/amazing-fish/svg-painting-process/issues/3) 保持开放。远端实际HEAD/CI/Review以PR刷新及本地人工报告为准，不能沿用上轮结果。
 
 ## 当前结论
